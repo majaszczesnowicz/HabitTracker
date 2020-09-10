@@ -1,20 +1,16 @@
 <ion-header>
   <ion-toolbar color="medium">
-    <ion-title>pilne</ion-title>
+    <ion-title>na później</ion-title>
     <ion-buttons slot="start">
       <ion-menu-button menu="main-menu"></ion-menu-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="add()"><ion-icon name="add" color="light" style="zoom:2.0"></ion-icon></ion-button>
+      <ion-button><ion-icon name="add" color="light" style="zoom:2.0"></ion-icon></ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
-  <ion-list>
-    <ion-item *ngFor="let item of items">{{item.text}}</ion-item>
-  </ion-list>
 
 </ion-content>
 
@@ -23,7 +19,7 @@
   <ion-grid>
     <ion-row>
       <ion-col style="text-align: left">
-        <ion-button padding="left" [routerLink]="['/listy']" color="success">
+        <ion-button [routerLink]="['/listy']" color="success">
             <ion-icon name="alert"></ion-icon>
         </ion-button>
       </ion-col>

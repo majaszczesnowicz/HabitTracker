@@ -19,6 +19,26 @@ const routes: Routes = [
     path: 'listy',
     loadChildren: () => import('./pages/listy/listy.module').then( m => m.ListyPageModule)
   },
+  {
+    path: 'napozniej',
+    loadChildren: () => import('./pages/napozniej/napozniej.module').then( m => m.NapozniejPageModule)
+  },
+  {
+    path: 'wykonane',
+    loadChildren: () => import('./pages/wykonane/wykonane.module').then( m => m.WykonanePageModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'tos',
+    loadChildren: () => import('./tos/tos.module').then( m => m.TosPageModule)
+  },
+  {
+    path: 'profile',
+    loadChildren: () => import('./pages/profile/profile.module').then( m => m.ProfilePageModule)
+  }
 ];
 
 @NgModule({

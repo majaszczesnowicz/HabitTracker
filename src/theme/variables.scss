@@ -2,6 +2,10 @@
 // http://ionicframework.com/docs/theming/
 
 /** Ionic CSS Variables **/
+ion-button {
+  text-transform: none;
+ }
+
 :root {
   /** primary **/
   --ion-color-primary: #CFA4BF;
