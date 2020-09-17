@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AlertController } from '@ionic/angular';
 
 @Component({
@@ -9,21 +10,22 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./listy.page.scss'],
 })
 export class ListyPage implements OnInit {
-
-  items = [{
-    text: "test",
-    created: new Date(),
-    position: 0,
-  }];
+  items = [];
+  uid = {};
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore,
-    private alertCtrl: AlertController ) { }
+    private alertCtrl: AlertController ) { 
+      this.afAuth.authState.subscribe(user => {
+        if (user)
+          this.uid = user.uid;
+      });
+    }
 
   ngOnInit() {
     this.afAuth.authState.subscribe(user => {
       if (!user)
         return;
-      this.db.collection('users/${this.afAuth.auth.currentUser.uid}/pilne').snapshotChanges().subscribe(colSnap => {
+      this.db.collection(`users/${this.uid}/pilne`).snapshotChanges().subscribe(colSnap => {
         this.items = [];
         colSnap.forEach(a => {
           this.items.push(a.payload.doc.data());
@@ -51,9 +53,10 @@ export class ListyPage implements OnInit {
           let nowUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), 
           now.getUTCMinutes(), now.getUTCSeconds()));
 
-          this.db.collection('users/${this.afAuth.auth.currentUser.uid}/pilne').add({
+          this.db.collection(`users/${this.uid}/pilne`).add({
             text: val.zadanie,
-            position: this.items ? this.items[0].position + 1 : 0, 
+            position: 0,
+            // position: this.items ? this.items[0].position + 1 : 0, 
             created: nowUtc
           });
         }
