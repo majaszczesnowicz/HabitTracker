@@ -5,12 +5,34 @@
       <ion-menu-button menu="main-menu"></ion-menu-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button><ion-icon name="add" color="light" style="zoom:2.0"></ion-icon></ion-button>
+      <ion-button (click)="add()"><ion-icon name="add" color="light" style="zoom:2.0"></ion-icon></ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+  <ion-list>
+    <ion-item-sliding *ngFor="let item of items">
+      <ion-item><ion-label>{{item.text}}</ion-label></ion-item>
+
+      <ion-item-options side="start">
+        
+      </ion-item-options>
+
+      <ion-item-options side="end">
+        <ion-item-option color="success" (click)="completeTask(item)">
+          <ion-icon name="checkmark" style="zoom:1.5"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="warning" (click)="moveUrgent(item)">
+          <ion-icon name="time-outline" style="zoom:1.5"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="tertiary" (click)="deleteTask(item)">
+          <ion-icon name="close" style="zoom:1.5"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
 
 </ion-content>
 
