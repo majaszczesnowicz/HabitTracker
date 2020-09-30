@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar color="medium">
-    <ion-title>wykonane</ion-title>
+    <ion-title>wykonane ({{items.length}})</ion-title>
     <ion-buttons slot="start">
       <ion-menu-button menu="main-menu"></ion-menu-button>
     </ion-buttons>
@@ -10,6 +10,9 @@
 <ion-content>
 
   <ion-list>
+
+    <ion-spinner *ngIf = "loading" color="success"></ion-spinner>
+
     <ion-item-sliding *ngFor="let item of items">
       <ion-item><ion-label>{{item.text}}</ion-label></ion-item>
 

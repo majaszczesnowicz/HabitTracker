@@ -11,6 +11,7 @@ import { AlertController } from '@ionic/angular';
 export class NapozniejPage implements OnInit {
   items = [];
   uid = {};
+  loading = true; 
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore,
     private alertCtrl: AlertController ) { 
@@ -33,6 +34,7 @@ export class NapozniejPage implements OnInit {
           item['id'] = a.payload.doc.id;
           this.items.push(item);
         });
+        this.loading = false;
       });
     });
   }
@@ -70,6 +72,14 @@ export class NapozniejPage implements OnInit {
             pos: this.getPosition(), 
             created: nowUtc
           });
+          if (this.items.length >= 100)
+            this.alertCtrl.create({
+              header: 'zbyt dużo elementów na liście',
+              message: 'wyświetlane jest do 100 elementów',
+              buttons: ['ok'],
+            }).then(warning => {
+              warning.present();
+            });
         }
       }
       ],
@@ -111,5 +121,11 @@ export class NapozniejPage implements OnInit {
     });
   }
 
+  changePos(index, offset){
+    this.db.doc(`users/${this.uid}/napozniej/${this.items[index].id}`).set({
+      pos: this.items[index+offset].pos}, {merge: true});
+    this.db.doc(`users/${this.uid}/napozniej/${this.items[index+offset].id}`).set({
+      pos: this.items[index].pos}, {merge: true});
+    }
 
 }

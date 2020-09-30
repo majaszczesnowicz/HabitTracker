@@ -12,6 +12,7 @@ import { AlertController } from '@ionic/angular';
 export class ListyPage implements OnInit {
   items = [];
   uid = {};
+  loading = true; 
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore,
     private alertCtrl: AlertController ) { 
@@ -34,6 +35,7 @@ export class ListyPage implements OnInit {
           item['id'] = a.payload.doc.id;
           this.items.push(item);
         });
+        this.loading = false;
       });
     });
   }
@@ -71,6 +73,15 @@ export class ListyPage implements OnInit {
             pos: this.getPosition(), 
             created: nowUtc
           });
+
+          if (this.items.length >= 100)
+            this.alertCtrl.create({
+              header: 'zbyt dużo elementów na liście',
+              message: 'wyświetlane jest do 100 elementów',
+              buttons: ['ok'],
+            }).then(warning => {
+              warning.present();
+            });
         }
       }
       ],
@@ -110,6 +121,13 @@ export class ListyPage implements OnInit {
       });
       this.db.doc(`users/${this.uid}/${list}/${id}`).set(item);
     });
+  }
+
+ changePos(index, offset){
+  this.db.doc(`users/${this.uid}/pilne/${this.items[index].id}`).set({
+    pos: this.items[index+offset].pos}, {merge: true});
+  this.db.doc(`users/${this.uid}/pilne/${this.items[index+offset].id}`).set({
+    pos: this.items[index].pos}, {merge: true});
   }
 
 }

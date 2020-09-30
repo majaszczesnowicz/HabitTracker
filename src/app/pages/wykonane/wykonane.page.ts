@@ -11,6 +11,7 @@ import { AlertController } from '@ionic/angular';
 export class WykonanePage implements OnInit {
   items = [];
   uid = {};
+  loading = true; 
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore,
     private alertCtrl: AlertController ) { 
@@ -25,7 +26,9 @@ export class WykonanePage implements OnInit {
       if (!user)
         return;
       this.db.collection(`users/${this.uid}/wykonane`, ref => {
-        return ref.orderBy('pos','desc');
+        let query = ref.orderBy('pos','desc');
+        query = query.limit(100);
+        return query;
       }).snapshotChanges().subscribe(colSnap => {
         this.items = [];
         colSnap.forEach(a => {
@@ -33,6 +36,7 @@ export class WykonanePage implements OnInit {
           item['id'] = a.payload.doc.id;
           this.items.push(item);
         });
+        this.loading = false;
       });
     });
   }
