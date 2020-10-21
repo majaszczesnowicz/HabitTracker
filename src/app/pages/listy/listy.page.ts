@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AlertController } from '@ionic/angular';
+import * as firebase from 'firebase';
 
 
 @Component({
@@ -15,7 +16,7 @@ export class ListyPage implements OnInit {
   loading = true; 
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore,
-    private alertCtrl: AlertController ) { 
+    private alertCtrl: AlertController) { 
       this.afAuth.authState.subscribe(user => {
         if (user)
           this.uid = user.uid;
@@ -101,7 +102,16 @@ export class ListyPage implements OnInit {
   }
 
   completeTask(item){
-    this.moveTask(item, 'wykonane')
+    this.moveTask(item, 'wykonane');
+    const increment = firebase.firestore.FieldValue.increment(1);
+    if(!this.db.collection('users').doc(`${this.uid}`).collection('counters').doc('taskCounter')){
+      const counterRef = this.db.collection('users').doc(`${this.uid}`).collection('counters').doc('taskCounter');
+      counterRef.set({ taskCounter: 1 });
+    }
+    else{
+      const counterRef = this.db.collection('users').doc(`${this.uid}`).collection('counters').doc('taskCounter');
+      counterRef.update({ taskCounter: increment });
+    }
   }
 
   moveLater(item){
