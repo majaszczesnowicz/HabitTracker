@@ -1,8 +1,9 @@
+import { DetailPageModule } from './pages/detail/detail.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { IonicModule, IonicRouteStrategy, NavParams } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -19,6 +20,7 @@ import { LoginPageModule } from './pages/login/login.module';
 
 
 
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -29,11 +31,13 @@ import { LoginPageModule } from './pages/login/login.module';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
-    LoginPageModule
+    LoginPageModule,
+    DetailPageModule
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    NavParams,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

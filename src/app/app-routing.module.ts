@@ -1,3 +1,4 @@
+import { DataResolverService } from './data-resolver.service';
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
@@ -42,6 +43,17 @@ const routes: Routes = [
   {
     path: 'privacy',
     loadChildren: () => import('./privacy/privacy.module').then( m => m.PrivacyPageModule)
+  },
+  {
+    path: 'detail',
+    loadChildren: () => import('./pages/detail/detail.module').then( m => m.DetailPageModule)
+  },
+  {
+    path: 'detail/:id',
+    resolve: {
+      habitData: DataResolverService
+    },
+    loadChildren: () => import('./pages/detail/detail.module').then( m => m.DetailPageModule)
   }
 ];
 

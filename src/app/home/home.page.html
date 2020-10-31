@@ -12,9 +12,18 @@
 
 <ion-content>
 
-  <ion-list>
-    <ion-spinner *ngIf = "loading" color="success"></ion-spinner>
-    <ion-item *ngFor="let item of items"><ion-label>{{item}}</ion-label></ion-item>
-  </ion-list>
+  <ion-spinner *ngIf = "loading" color="success"></ion-spinner>
+  
+  <ion-card *ngFor="let item of items" color={{item.color}}>
+    <ion-item (click)="onSelect(item.id, item)" detail="true" lines="none">
+      <ion-label>{{item.text}}</ion-label>   
+    </ion-item>
+  
+    <ion-card-content>
+        <p>... dni do zakończenia</p>
+        <p>{{user.name}}</p>
+    </ion-card-content>
+    
+  </ion-card>
 
 </ion-content>
