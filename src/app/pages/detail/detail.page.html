@@ -4,6 +4,9 @@
       <ion-buttons slot="start">
         <ion-back-button defaultHref="/"></ion-back-button>
       </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button (click)="del(habit.id)"><ion-icon name="trash-outline" color="dark" style="zoom:1.6"></ion-icon></ion-button>
+      </ion-buttons>
     </ion-toolbar>
   </ion-header>
   
