@@ -12,6 +12,7 @@ import { AlertController } from '@ionic/angular';
 })
 export class DetailPage implements OnInit {
   habit: any;
+  date;
   uid = {};
 
   constructor(public navCtrl: NavController, private afAuth: AngularFireAuth, private db: AngularFirestore, 
@@ -51,6 +52,7 @@ export class DetailPage implements OnInit {
     if (this.route.snapshot.data['habitData']){
       this.habit = this.route.snapshot.data['habitData'];
     }
+    this.date = new Date(this.habit.date);
   }
 
 }

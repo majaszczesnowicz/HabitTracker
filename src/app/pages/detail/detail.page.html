@@ -1,6 +1,6 @@
 <ion-header>
     <ion-toolbar color={{habit.color}}>
-      <ion-title>{{habit.text}}</ion-title>
+      <ion-title>{{habit.name}}</ion-title>
       <ion-buttons slot="start">
         <ion-back-button defaultHref="/"></ion-back-button>
       </ion-buttons>
@@ -12,4 +12,6 @@
   
   <ion-content>
     <p>informacje o nawyku, kalendarz, opcje usuwania, edycji itp.</p>
+    <p>{{habit.date}}</p>
+    <p>{{date}}</p>
   </ion-content>

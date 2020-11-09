@@ -27,7 +27,7 @@ export class WykonanePage implements OnInit {
         return;
       this.db.collection(`users/${this.uid}/wykonane`, ref => {
         let query = ref.orderBy('pos','desc');
-        query = query.limit(100);
+        query = query.limit(200);
         return query;
       }).snapshotChanges().subscribe(colSnap => {
         this.items = [];

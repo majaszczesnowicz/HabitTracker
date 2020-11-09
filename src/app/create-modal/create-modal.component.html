@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar color="medium">
+    <ion-title>utwórz nowy nawyk</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismissModal()"><ion-icon name="arrow-back-outline" color="light" style="zoom:1.5"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label position="floating">nazwa</ion-label>
+    <ion-input [formControl]="nameInput" type="text"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">opis</ion-label>
+    <ion-input type="text" placeholder="nad czym będziesz pracować?" [(ngModel)]="description"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>data rozpoczęcia</ion-label>
+    <ion-datetime [formControl]="dateInput" displayFormat="DD/MM/YYYY" min={{minDate}} max={{maxDate}} [(ngModel)]="habitDate"
+    cancelText="anuluj" doneText="zapisz"></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label>czas trwania</ion-label>
+    <ion-select [formControl]="durationInput" placeholder="wybierz" okText="zapisz" cancelText="anuluj">
+      <ion-select-option value="week">7 dni</ion-select-option>
+      <ion-select-option value="month">30 dni</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>przypomnienie</ion-label>
+    <ion-datetime displayFormat="H:mm" [(ngModel)]="habitTime" placeholder="godzina powiadomienia" cancelText="anuluj" doneText="zapisz" (ionCancel)="clear()"></ion-datetime>
+  </ion-item>
+  <ion-button [disabled]="nameInput.invalid || dateInput.invalid || durationInput.invalid" expand="block" (click)="saveHabit()" class="ion-margin-top">zapisz</ion-button>
+</ion-content>

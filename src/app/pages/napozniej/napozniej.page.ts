@@ -27,7 +27,9 @@ export class NapozniejPage implements OnInit {
       if (!user)
         return;
       this.db.collection(`users/${this.uid}/napozniej`, ref => {
-        return ref.orderBy('pos','desc');
+        let query = ref.orderBy('pos','desc');
+        query = query.limit(2);
+        return query;
       }).snapshotChanges().subscribe(colSnap => {
         this.items = [];
         colSnap.forEach(a => {

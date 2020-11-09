@@ -28,7 +28,9 @@ export class ListyPage implements OnInit {
       if (!user)
         return;
       this.db.collection(`users/${this.uid}/pilne`, ref => {
-        return ref.orderBy('pos','desc');
+        let query = ref.orderBy('pos','desc');
+        query = query.limit(100);
+        return query;
       }).snapshotChanges().subscribe(colSnap => {
         this.items = [];
         colSnap.forEach(a => {
