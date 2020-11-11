@@ -52,7 +52,8 @@ export class DetailPage implements OnInit {
     if (this.route.snapshot.data['habitData']){
       this.habit = this.route.snapshot.data['habitData'];
     }
-    this.date = new Date(this.habit.date);
+    let today = new Date();
+    this.date =  new Date(today.getFullYear(),today.getMonth(),today.getDate()+10).toISOString();
   }
 
 }

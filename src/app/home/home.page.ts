@@ -18,6 +18,8 @@ export class HomePage {
   loading = true;
   randomColor;
   habit: any = {};
+  iconSrc = "/assets/custom-ion-icons/progress0.svg";
+
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore, public navCtrl: NavController, private router: Router,
     private alertCtrl: AlertController, private dataService: DataService, private modalCtrl: ModalController) { 
@@ -41,8 +43,10 @@ export class HomePage {
           });
           this.loading = false;
         });
+        this.countDays();
       });
     }
+
   
     async openModal(){
       const modal = await this.modalCtrl.create({
@@ -74,8 +78,18 @@ export class HomePage {
             date: this.habit.date,
             duration: this.habit.duration,
             reminder: this.habit.reminder
+          }).then(docRef => {
+            let habitDate = new Date(this.habit.date);
+            let daysNumber = Number(this.habit.duration)+1;
+            for(let i = 1; i < daysNumber; i++){
+              let date =  new Date(habitDate.getFullYear(),habitDate.getMonth(),habitDate.getDate()+i).toISOString();
+              this.db.collection(`users/${this.uid}/trwajace/${docRef.id}/days`).add({
+                date: date,
+                ifDone: false
+              })
+            }
           });
-  
+          
           if (this.items.length >= 20)
             this.alertCtrl.create({
               header: 'to zbyt dużo nawyków na raz!',
@@ -92,66 +106,6 @@ export class HomePage {
  
     }
 
-    // async add(){
-    //   const alert = await this.alertCtrl.create({
-    //     header: 'nowy nawyk',
-    //     buttons: [
-    //     {
-    //       text: 'anuluj',
-    //       role: 'cancel',
-    //       handler: () => {
-    //         console.log('anuluj');
-    //       }
-    //     },
-    //     {
-    //       text: 'dodaj',
-    //       handler: (val) => {
-    //         console.log('dodaj');
-    //         let now = new Date();
-    //         let nowUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), 
-    //         now.getUTCMinutes(), now.getUTCSeconds()));
-    //         this.randomColor = this.randomNumber();
-  
-    //         this.db.collection(`users/${this.uid}/trwajace`).add({
-    //           name: val.nawyk, 
-    //           created: nowUtc,
-    //           color: this.randomColor,
-    //           date: val.startDate,
-    //           duration: ...
-    //         });
-  
-    //         if (this.items.length >= 100)
-    //           this.alertCtrl.create({
-    //             header: 'to zbyt dużo nawyków na raz!',
-    //             message: 'wyświetlane jest do 100 elementów',
-    //             buttons: ['ok'],
-    //           }).then(warning => {
-    //             warning.present();
-    //           });
-    //       }
-    //     }
-    //     ],
-    //     inputs: [
-    //       {
-    //         name: 'nawyk',
-    //         type: 'text',
-    //         placeholder: 'nazwa'
-    //       },
-    //       {
-    //         name: 'startDate',
-    //         type: 'date',
-    //         placeholder: 'data rozpoczęcia'
-    //       },
-    //       {
-    //         name: 'endDate',
-    //         type: 'date',
-    //         placeholder: 'data zakończenia',
-    //         label: 'data zakończenia'
-    //       }
-    //     ],
-    //   });
-    //   return await alert.present();
-    // }
 
     randomNumber(){
       const min = Math.ceil(1);
@@ -169,6 +123,15 @@ export class HomePage {
         case 5:
           return "warning";
       } 
+    }
+
+    countDays(){
+      let today = new Date();
+      for(let item of this.items){
+        let endDate = new Date(item.date);
+        const daysLeft = endDate.valueOf() - today.valueOf();
+        item.daysLeft = daysLeft;
+      }
     }
 
     onSelect(id, item) {
