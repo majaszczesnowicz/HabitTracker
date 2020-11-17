@@ -6,7 +6,7 @@ Before running any of the following scripts make sure that you have Node.js and 
 
 ## Available Scripts
 
-### start &#8594; `ng serve`
+### start &#8594; `ng start`
 
 Runs the app in the development mode.<br />
 Open [http://localhost:4200](http://localhost:4200) to view it in the browser.
