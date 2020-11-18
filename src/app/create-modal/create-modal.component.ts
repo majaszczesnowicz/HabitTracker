@@ -20,13 +20,13 @@ export class CreateModalComponent implements OnInit{
   description: string;
   maxDate;
   minDate;
-  
+
   ngOnInit(){
     this.habitTime = null;
-    this.description = "";
-    var today = new Date();
+    this.description = '';
+    const today = new Date();
     this.minDate = new Date(today).toISOString();
-    this.maxDate = new Date(today.getFullYear()+2,today.getMonth(),today.getDate());
+    this.maxDate = new Date(today.getFullYear() + 2, today.getMonth(), today.getDate());
     this.maxDate = new Date(this.maxDate).toISOString();
   }
 

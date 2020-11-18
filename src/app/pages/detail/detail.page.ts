@@ -15,16 +15,21 @@ export class DetailPage implements OnInit {
   date;
   uid = {};
 
-  constructor(public navCtrl: NavController, private afAuth: AngularFireAuth, private db: AngularFirestore, 
-    private router: Router, private route: ActivatedRoute, public navParams: NavParams, private alertCtrl: AlertController) { 
-      this.afAuth.authState.subscribe(user => {
-        if (user)
-          this.uid = user.uid;
-      });
-      
+  constructor(public navCtrl: NavController,
+              private afAuth: AngularFireAuth,
+              private db: AngularFirestore,
+              private router: Router,
+              private route: ActivatedRoute,
+              public navParams: NavParams,
+              private alertCtrl: AlertController) {
+    this.afAuth.authState.subscribe(user => {
+      if (user) {
+        this.uid = user.uid;
+      }
+    });
   }
 
-  async del(habitId){
+  async del(habitId) {
     const alert = await this.alertCtrl.create({
       header: 'czy na pewno chcesz usunąć ten nawyk?',
       buttons: [

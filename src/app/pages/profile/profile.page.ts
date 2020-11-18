@@ -12,14 +12,14 @@ export class ProfilePage implements OnInit {
   uid = {};
   items = [];
 
-  
-  constructor(private afAuth: AngularFireAuth, private db: AngularFirestore) { 
+
+  constructor(private afAuth: AngularFireAuth, private db: AngularFirestore) {
     this.afAuth.authState.subscribe(user => {
       if (user)
         this.user = user;
         this.uid = user.uid;
     });
- 
+
   }
 
   ngOnInit() {
@@ -34,13 +34,11 @@ export class ProfilePage implements OnInit {
         });
       });
     });
-    }
- 
+  }
 
-  signOut(){
+  signOut() {
     this.afAuth.signOut().then(() => {
       location.reload();
     });
   }
-
 }

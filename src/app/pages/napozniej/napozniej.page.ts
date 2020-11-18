@@ -12,10 +12,10 @@ import * as firebase from 'firebase';
 export class NapozniejPage implements OnInit {
   items = [];
   uid = {};
-  loading = true; 
+  loading = true;
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore,
-    private alertCtrl: AlertController ) { 
+    private alertCtrl: AlertController ) {
       this.afAuth.authState.subscribe(user => {
         if (user)
           this.uid = user.uid;
@@ -67,12 +67,12 @@ export class NapozniejPage implements OnInit {
         handler: (val) => {
           console.log('dodaj');
           let now = new Date();
-          let nowUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), 
+          let nowUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(),
           now.getUTCMinutes(), now.getUTCSeconds()));
 
           this.db.collection(`users/${this.uid}/napozniej`).add({
             text: val.zadanie,
-            pos: this.getPosition(), 
+            pos: this.getPosition(),
             created: nowUtc
           });
           if (this.items.length >= 100)
@@ -133,11 +133,15 @@ export class NapozniejPage implements OnInit {
     });
   }
 
-  changePos(index, offset){
-    this.db.doc(`users/${this.uid}/napozniej/${this.items[index].id}`).set({
-      pos: this.items[index+offset].pos}, {merge: true});
-    this.db.doc(`users/${this.uid}/napozniej/${this.items[index+offset].id}`).set({
-      pos: this.items[index].pos}, {merge: true});
-    }
+  changePos(index, offset) {
+    this.db.doc(`users/${this.uid}/napozniej/${this.items[index].id}`).set(
+      { pos: this.items[index+offset].pos },
+      { merge: true }
+    );
 
+    this.db.doc(`users/${this.uid}/napozniej/${this.items[index + offset].id}`).set(
+      { pos: this.items[index].pos },
+      { merge: true }
+    );
+  }
 }

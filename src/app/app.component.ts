@@ -41,7 +41,7 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
-      this.afAuth.authState.subscribe(user =>{
+      this.afAuth.authState.subscribe(user => {
         if (!user) {
           this.router.navigateByUrl('/login');
         }

@@ -13,10 +13,10 @@ import * as firebase from 'firebase';
 export class ListyPage implements OnInit {
   items = [];
   uid = {};
-  loading = true; 
+  loading = true;
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore,
-    private alertCtrl: AlertController) { 
+    private alertCtrl: AlertController) {
       this.afAuth.authState.subscribe(user => {
         if (user)
           this.uid = user.uid;
@@ -28,7 +28,7 @@ export class ListyPage implements OnInit {
       if (!user)
         return;
       this.db.collection(`users/${this.uid}/pilne`, ref => {
-        let query = ref.orderBy('pos','desc');
+        let query = ref.orderBy('pos', 'desc');
         query = query.limit(100);
         return query;
       }).snapshotChanges().subscribe(colSnap => {
@@ -68,12 +68,12 @@ export class ListyPage implements OnInit {
         handler: (val) => {
           console.log('dodaj');
           let now = new Date();
-          let nowUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), 
+          let nowUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(),
           now.getUTCMinutes(), now.getUTCSeconds()));
 
           this.db.collection(`users/${this.uid}/pilne`).add({
             text: val.zadanie,
-            pos: this.getPosition(), 
+            pos: this.getPosition(),
             created: nowUtc
           });
 

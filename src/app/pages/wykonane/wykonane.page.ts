@@ -11,20 +11,21 @@ import { AlertController } from '@ionic/angular';
 export class WykonanePage implements OnInit {
   items = [];
   uid = {};
-  loading = true; 
+  loading = true;
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore,
-    private alertCtrl: AlertController ) { 
-      this.afAuth.authState.subscribe(user => {
-        if (user)
-          this.uid = user.uid;
-      });
-    }
+              private alertCtrl: AlertController) {
+    this.afAuth.authState.subscribe(user => {
+      if (user) {
+        this.uid = user.uid;
+      }
+    });
+  }
 
   ngOnInit() {
     this.afAuth.authState.subscribe(user => {
-      if (!user)
-        return;
+      if (!user) { return; }
+
       this.db.collection(`users/${this.uid}/wykonane`, ref => {
         let query = ref.orderBy('pos','desc');
         query = query.limit(200);
@@ -41,8 +42,7 @@ export class WykonanePage implements OnInit {
     });
   }
 
-  deleteTask(item){
+  deleteTask(item) {
     this.db.doc(`users/${this.uid}/wykonane/${item.id}`).delete();
   }
-
 }
