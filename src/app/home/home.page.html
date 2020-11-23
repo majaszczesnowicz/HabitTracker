@@ -1,6 +1,6 @@
-<ion-header>
+﻿<ion-header>
   <ion-toolbar color="medium">
-    <ion-title>trwające ({{items.length}})</ion-title>
+    <ion-title>trwające nawyki ({{items.length}})</ion-title>
     <ion-buttons slot="start">
       <ion-menu-button menu="main-menu"></ion-menu-button>
     </ion-buttons>
@@ -20,11 +20,12 @@
     </ion-item>
   
     <ion-card-content>
-        <p>{{item.description}}</p>
-        <p>{{item.daysLeft}} dni do końca</p>
+        <p class="desc">{{item.description}}</p>
+        <p>nawyk trwający {{item.duration}} dni</p>
+        <p>{{item.message}}</p>
     </ion-card-content>
 
-        <ion-icon class="progress-icon" src={{iconSrc}}></ion-icon>
+        <ion-icon class="progress-icon" src={{item.icon}}></ion-icon>
 
   </ion-card>
 

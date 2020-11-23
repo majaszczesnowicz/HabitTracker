@@ -1,6 +1,6 @@
-<ion-header>
+﻿<ion-header>
   <ion-toolbar color="medium">
-    <ion-title>zakończone</ion-title>
+    <ion-title>zakończone ({{items.length}})</ion-title>
     <ion-buttons slot="start">
       <ion-menu-button menu="main-menu"></ion-menu-button>
     </ion-buttons>
@@ -8,5 +8,20 @@
 </ion-header>
 
 <ion-content>
+  <ion-spinner *ngIf = "loading" color="success"></ion-spinner>
+  
+  <ion-card *ngFor="let item of items" color={{item.color}}>
+    <ion-item (click)="onSelect(item.id, item)" detail="true" lines="none">
+      <ion-label>{{item.name}}</ion-label>   
+    </ion-item>
+  
+    <ion-card-content>
+      <p class="desc">{{item.description}}</p>
+      <p>nawyk trwający {{item.duration}} dni</p>
+      <p>{{item.message}}</p>
+    </ion-card-content>
 
+        <ion-icon class="progress-icon" src={{iconSrc}}></ion-icon>
+
+  </ion-card>
 </ion-content>

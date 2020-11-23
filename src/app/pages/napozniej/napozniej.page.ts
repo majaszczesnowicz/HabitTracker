@@ -104,16 +104,19 @@ export class NapozniejPage implements OnInit {
   completeTask(item){
     this.moveTask(item, 'wykonane');
     const increment = firebase.firestore.FieldValue.increment(1);
-    if(!this.db.collection('users').doc(`${this.uid}`).collection('counters').doc('taskCounter')){
-      const counterRef = this.db.collection('users').doc(`${this.uid}`).collection('counters').doc('taskCounter');
-      counterRef.set({ taskCounter: 1 });
-    }
-    else{
-      const counterRef = this.db.collection('users').doc(`${this.uid}`).collection('counters').doc('taskCounter');
-      counterRef.update({ taskCounter: increment });
-    }
+    const counterRef = this.db.collection('users').doc(`${this.uid}`).collection('counters').doc('counter'); 
+    this.db.collection('users').doc(`${this.uid}`).collection('counters').doc('counter').ref.get().then((documentSnapshot) => {
+      if(!documentSnapshot.exists){
+        counterRef.set(
+          { taskCounter: 1,
+            habitCounter: 0
+          });
+      }
+      else{
+        counterRef.update({ taskCounter: increment });
+      }
+    });
   }
-
   moveUrgent(item){
     this.moveTask(item, 'pilne')
   }

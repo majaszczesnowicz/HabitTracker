@@ -14,19 +14,19 @@
         <div class="ion-text-center">
           <ion-text color="primary"><h3>hej, {{user.displayName}}</h3></ion-text>
 
-            <ion-list>
-              <ion-item-group>
-                <ion-item-divider color="tertiary">
-                  <ion-label>ukończone</ion-label>
-                </ion-item-divider>
-                <ion-item *ngFor="let item of items" text-center>
-                  <ion-label>nawyki: {{item.taskCounter}}</ion-label>
-                </ion-item>
-                <ion-item *ngFor="let item of items" text-center>
-                  <ion-label>zadania: {{item.taskCounter}}</ion-label>
-                </ion-item>
-              </ion-item-group>
-            </ion-list>
+          <ion-list>
+            <ion-item-group>
+              <ion-item-divider color="tertiary">
+                <ion-label>ukończone</ion-label>
+              </ion-item-divider>
+              <ion-item *ngFor="let item of items" text-center>
+                <ion-label>nawyki: {{item.habitCounter}}</ion-label>
+              </ion-item>
+              <ion-item *ngFor="let item of items" text-center>
+                <ion-label>zadania: {{item.taskCounter}}</ion-label>
+              </ion-item>
+            </ion-item-group>
+          </ion-list>
          
           <ion-button color="tertiary" (click)="signOut()">wyloguj</ion-button>
         </div>
