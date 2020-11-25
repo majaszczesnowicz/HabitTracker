@@ -4,6 +4,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { CalendarComponent } from 'ionic2-calendar';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-detail',
@@ -14,6 +16,16 @@ export class DetailPage implements OnInit {
   habit: any;
   date;
   uid = {};
+  eventSource = [];
+  viewTitle: string;
+
+  calendar = {
+        mode: 'month',
+        currentDate: new Date(),
+        locale: 'pl-PL'
+      };
+    
+  @ViewChild(CalendarComponent) myCal: CalendarComponent;
 
   constructor(public navCtrl: NavController,
               private afAuth: AngularFireAuth,
@@ -57,8 +69,6 @@ export class DetailPage implements OnInit {
     if (this.route.snapshot.data['habitData']){
       this.habit = this.route.snapshot.data['habitData'];
     }
-    let today = new Date();
-    this.date =  new Date(today.getFullYear(),today.getMonth(),today.getDate()+10).toISOString();
   }
 
 }
