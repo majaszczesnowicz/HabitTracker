@@ -5,6 +5,7 @@ import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
+
 export class DataResolverService implements Resolve<any> {
 
   constructor(private dataService: DataService) { }
