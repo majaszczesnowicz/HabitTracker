@@ -24,8 +24,17 @@ export class DetailPage implements OnInit {
         currentDate: new Date(),
         locale: 'pl-PL'
       };
+  
+  event = {
+    title: '',
+    desc: '',
+    startTime: null,
+    endTime: '',
+    allDay: true
+  };
     
   @ViewChild(CalendarComponent) myCal: CalendarComponent;
+  modalCtrl: any;
 
   constructor(public navCtrl: NavController,
               private afAuth: AngularFireAuth,
@@ -69,6 +78,18 @@ export class DetailPage implements OnInit {
     if (this.route.snapshot.data['habitData']){
       this.habit = this.route.snapshot.data['habitData'];
     }
+  }
+
+  next(){
+    this.myCal.slideNext();
+  }
+
+  back(){
+    this.myCal.slidePrev();
+  }
+
+  onViewTitleChanged(title) {
+    this.viewTitle = title;
   }
 
 }
