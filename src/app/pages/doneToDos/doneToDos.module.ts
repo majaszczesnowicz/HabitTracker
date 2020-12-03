@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { NapozniejPageRoutingModule } from './napozniej-routing.module';
+import { DoneToDosPageRoutingModule } from './doneToDos-routing.module';
 
-import { NapozniejPage } from './napozniej.page';
+import { DoneToDosPage } from './doneToDos.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    NapozniejPageRoutingModule
+    DoneToDosPageRoutingModule
   ],
-  declarations: [NapozniejPage]
+  declarations: [DoneToDosPage]
 })
-export class NapozniejPageModule {}
+export class DoneToDosPageModule {}

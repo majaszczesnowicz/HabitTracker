@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { WykonanePageRoutingModule } from './wykonane-routing.module';
+import { UrgentToDosPageRoutingModule } from './urgentToDos-routing.module';
 
-import { WykonanePage } from './wykonane.page';
+import { UrgentToDosPage } from './urgentToDos.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    WykonanePageRoutingModule
+    UrgentToDosPageRoutingModule
   ],
-  declarations: [WykonanePage]
+  declarations: [UrgentToDosPage]
 })
-export class WykonanePageModule {}
+export class UrgentToDosPageModule {}

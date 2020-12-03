@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
-
 import { LoginPageRoutingModule } from './login-routing.module';
-import { FirebaseUIModule, firebase, firebaseui } from 'firebaseui-angular';
-
+import { FirebaseUIModule, firebase } from 'firebaseui-angular';
+import * as firebaseui from 'firebaseui/dist/npm__pl'
 import { LoginPage } from './login.page';
 
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
@@ -14,8 +12,8 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
   signInOptions: [
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
   ],
-  tosUrl: 'tos',
-  privacyPolicyUrl: 'privacy',
+  tosUrl: '/tos',
+  privacyPolicyUrl: '/privacy',
   credentialHelper: firebaseui.auth.CredentialHelper.NONE,
 };
 
@@ -30,5 +28,5 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
   declarations: [LoginPage],
   entryComponents: [LoginPage]
 })
-
 export class LoginPageModule {}
+

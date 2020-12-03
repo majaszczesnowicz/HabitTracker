@@ -32,7 +32,7 @@ export class HomePage implements OnInit{
       this.afAuth.authState.subscribe(user => {
         if (!user)
           return;
-        this.db.collection(`users/${this.uid}/trwajace`, ref => {
+        this.db.collection(`users/${this.uid}/ongoingHabits`, ref => {
           let query = ref.orderBy('created');
           query = query.limit(20);
           return query;
@@ -101,7 +101,7 @@ export class HomePage implements OnInit{
           now.getUTCMinutes(), now.getUTCSeconds()));
           this.randomColor = this.randomNumber();
   
-          this.db.collection(`users/${this.uid}/trwajace`).add({
+          this.db.collection(`users/${this.uid}/ongoingHabits`).add({
             name: this.habit.name, 
             description: this.habit.description,
             created: nowUtc,
@@ -114,7 +114,7 @@ export class HomePage implements OnInit{
             let daysNumber = Number(this.habit.duration)+1;
             for(let i = 1; i < daysNumber; i++){
               let date =  new Date(habitDate.getFullYear(),habitDate.getMonth(),habitDate.getDate()+i).toISOString();
-              this.db.collection(`users/${this.uid}/trwajace/${docRef.id}/days`).add({
+              this.db.collection(`users/${this.uid}/ongoingHabits/${docRef.id}/days`).add({
                 date: date,
                 ifDone: false
               })
@@ -172,7 +172,6 @@ export class HomePage implements OnInit{
         return differenceInDays(startDate, today);
       }
       if(compareAsc(today, endDate) == 1){
-        console.log("koniec");
         this.completeHabit(item);
       }
     }
@@ -207,10 +206,10 @@ export class HomePage implements OnInit{
     }
 
     completeHabit(item){
-      this.db.doc(`users/${this.uid}/trwajace/${item.id}`).delete();
+      this.db.doc(`users/${this.uid}/ongoingHabits/${item.id}`).delete();
       let id = item.id;
       delete item.id;
-      this.db.doc(`users/${this.uid}/zakonczone/${id}`).set(item);
+      this.db.doc(`users/${this.uid}/finishedHabits/${id}`).set(item);
 
       const increment = firebase.firestore.FieldValue.increment(1);
       const counterRef = this.db.collection('users').doc(`${this.uid}`).collection('counters').doc('counter'); 

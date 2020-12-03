@@ -58,14 +58,12 @@ export class DetailPage implements OnInit {
         text: 'anuluj',
         role: 'cancel',
         handler: () => {
-          console.log('anuluj');
         }
       },
       {
         text: 'usuń',
         handler: () => {
-          console.log('usuń');
-          this.db.doc(`users/${this.uid}/trwajace/${habitId}`).delete();
+          this.db.doc(`users/${this.uid}/ongoingHabits/${habitId}`).delete();
           this.router.navigateByUrl(`/`);
         }
       }

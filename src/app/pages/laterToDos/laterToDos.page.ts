@@ -4,19 +4,18 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AlertController } from '@ionic/angular';
 import * as firebase from 'firebase';
 
-
 @Component({
-  selector: 'app-listy',
-  templateUrl: './listy.page.html',
-  styleUrls: ['./listy.page.scss'],
+  selector: 'app-laterToDos',
+  templateUrl: './laterToDos.page.html',
+  styleUrls: ['./laterToDos.page.scss'],
 })
-export class ListyPage implements OnInit {
+export class LaterToDosPage implements OnInit {
   items = [];
   uid = {};
   loading = true;
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore,
-    private alertCtrl: AlertController) {
+    private alertCtrl: AlertController ) {
       this.afAuth.authState.subscribe(user => {
         if (user)
           this.uid = user.uid;
@@ -27,9 +26,9 @@ export class ListyPage implements OnInit {
     this.afAuth.authState.subscribe(user => {
       if (!user)
         return;
-      this.db.collection(`users/${this.uid}/pilne`, ref => {
-        let query = ref.orderBy('pos', 'desc');
-        query = query.limit(100);
+      this.db.collection(`users/${this.uid}/laterToDos`, ref => {
+        let query = ref.orderBy('pos','desc');
+        query = query.limit(2);
         return query;
       }).snapshotChanges().subscribe(colSnap => {
         this.items = [];
@@ -71,12 +70,11 @@ export class ListyPage implements OnInit {
           let nowUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(),
           now.getUTCMinutes(), now.getUTCSeconds()));
 
-          this.db.collection(`users/${this.uid}/pilne`).add({
+          this.db.collection(`users/${this.uid}/laterToDos`).add({
             text: val.zadanie,
             pos: this.getPosition(),
             created: nowUtc
           });
-
           if (this.items.length >= 100)
             this.alertCtrl.create({
               header: 'zbyt dużo elementów na liście',
@@ -100,11 +98,11 @@ export class ListyPage implements OnInit {
   }
 
   deleteTask(item){
-    this.db.doc(`users/${this.uid}/pilne/${item.id}`).delete();
+    this.db.doc(`users/${this.uid}/laterToDos/${item.id}`).delete();
   }
 
   completeTask(item){
-    this.moveTask(item, 'wykonane');
+    this.moveTask(item, 'doneToDos');
     const increment = firebase.firestore.FieldValue.increment(1);
     const counterRef = this.db.collection('users').doc(`${this.uid}`).collection('counters').doc('counter'); 
     this.db.collection('users').doc(`${this.uid}`).collection('counters').doc('counter').ref.get().then((documentSnapshot) => {
@@ -119,13 +117,12 @@ export class ListyPage implements OnInit {
       }
     });
   }
-
-  moveLater(item){
-    this.moveTask(item, 'napozniej')
+  moveUrgent(item){
+    this.moveTask(item, 'urgentToDos')
   }
 
   moveTask(item, list: string){
-    this.db.doc(`users/${this.uid}/pilne/${item.id}`).delete();
+    this.db.doc(`users/${this.uid}/laterToDos/${item.id}`).delete();
     let id = item.id;
     delete item.id;
     this.db.collection(`users/${this.uid}/${list}`, ref => {
@@ -139,11 +136,15 @@ export class ListyPage implements OnInit {
     });
   }
 
- changePos(index, offset){
-  this.db.doc(`users/${this.uid}/pilne/${this.items[index].id}`).set({
-    pos: this.items[index+offset].pos}, {merge: true});
-  this.db.doc(`users/${this.uid}/pilne/${this.items[index+offset].id}`).set({
-    pos: this.items[index].pos}, {merge: true});
-  }
+  changePos(index, offset) {
+    this.db.doc(`users/${this.uid}/laterToDos/${this.items[index].id}`).set(
+      { pos: this.items[index+offset].pos },
+      { merge: true }
+    );
 
+    this.db.doc(`users/${this.uid}/laterToDos/${this.items[index + offset].id}`).set(
+      { pos: this.items[index].pos },
+      { merge: true }
+    );
+  }
 }

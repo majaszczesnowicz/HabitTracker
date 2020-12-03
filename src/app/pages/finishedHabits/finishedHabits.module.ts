@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ZakonczonePageRoutingModule } from './zakonczone-routing.module';
+import { FinishedHabitsPageRoutingModule } from './finishedHabits-routing.module';
 
-import { ZakonczonePage } from './zakonczone.page';
+import { FinishedHabitsPage } from './finishedHabits.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ZakonczonePageRoutingModule
+    FinishedHabitsPageRoutingModule
   ],
-  declarations: [ZakonczonePage]
+  declarations: [FinishedHabitsPage]
 })
-export class ZakonczonePageModule {}
+export class FinishedHabitsPageModule {}

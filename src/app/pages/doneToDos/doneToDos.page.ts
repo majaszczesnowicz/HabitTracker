@@ -4,11 +4,11 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AlertController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-wykonane',
-  templateUrl: './wykonane.page.html',
-  styleUrls: ['./wykonane.page.scss'],
+  selector: 'app-doneToDos',
+  templateUrl: './doneToDos.page.html',
+  styleUrls: ['./doneToDos.page.scss'],
 })
-export class WykonanePage implements OnInit {
+export class DoneToDosPage implements OnInit {
   items = [];
   uid = {};
   loading = true;
@@ -26,7 +26,7 @@ export class WykonanePage implements OnInit {
     this.afAuth.authState.subscribe(user => {
       if (!user) { return; }
 
-      this.db.collection(`users/${this.uid}/wykonane`, ref => {
+      this.db.collection(`users/${this.uid}/doneToDos`, ref => {
         let query = ref.orderBy('pos','desc');
         query = query.limit(200);
         return query;
@@ -43,6 +43,6 @@ export class WykonanePage implements OnInit {
   }
 
   deleteTask(item) {
-    this.db.doc(`users/${this.uid}/wykonane/${item.id}`).delete();
+    this.db.doc(`users/${this.uid}/doneToDos/${item.id}`).delete();
   }
 }

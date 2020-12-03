@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ListyPageRoutingModule } from './listy-routing.module';
+import { LaterToDosPageRoutingModule } from './laterToDos-routing.module';
 
-import { ListyPage } from './listy.page';
+import { LaterToDosPage } from './laterToDos.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ListyPageRoutingModule
+    LaterToDosPageRoutingModule
   ],
-  declarations: [ListyPage]
+  declarations: [LaterToDosPage]
 })
-export class ListyPageModule {}
+export class LaterToDosPageModule {}

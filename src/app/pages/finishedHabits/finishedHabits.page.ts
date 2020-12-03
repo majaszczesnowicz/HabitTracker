@@ -8,11 +8,11 @@ import { Router } from '@angular/router';
 import { addDays, format } from 'date-fns';
 
 @Component({
-  selector: 'app-zakonczone',
-  templateUrl: './zakonczone.page.html',
-  styleUrls: ['./zakonczone.page.scss'],
+  selector: 'app-finishedHabits',
+  templateUrl: './finishedHabits.page.html',
+  styleUrls: ['./finishedHabits.page.scss'],
 })
-export class ZakonczonePage implements OnInit {
+export class FinishedHabitsPage implements OnInit {
   items = [];
   uid = {};
   loading = true;
@@ -27,7 +27,7 @@ export class ZakonczonePage implements OnInit {
       this.afAuth.authState.subscribe(user => {
         if (!user)
           return;
-        this.db.collection(`users/${this.uid}/zakonczone`, ref => {
+        this.db.collection(`users/${this.uid}/finishedHabits`, ref => {
           let query = ref.orderBy('created');
           return query;
         }).snapshotChanges().subscribe(colSnap => {

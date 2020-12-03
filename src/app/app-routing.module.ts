@@ -13,20 +13,20 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'zakonczone',
-    loadChildren: () => import('./pages/zakonczone/zakonczone.module').then( m => m.ZakonczonePageModule)
+    path: 'finishedHabits',
+    loadChildren: () => import('./pages/finishedHabits/finishedHabits.module').then( m => m.FinishedHabitsPageModule)
   },
   {
-    path: 'listy',
-    loadChildren: () => import('./pages/listy/listy.module').then( m => m.ListyPageModule)
+    path: 'urgentToDos',
+    loadChildren: () => import('./pages/urgentToDos/urgentToDos.module').then( m => m.UrgentToDosPageModule)
   },
   {
-    path: 'napozniej',
-    loadChildren: () => import('./pages/napozniej/napozniej.module').then( m => m.NapozniejPageModule)
+    path: 'laterToDos',
+    loadChildren: () => import('./pages/laterToDos/laterToDos.module').then( m => m.LaterToDosPageModule)
   },
   {
-    path: 'wykonane',
-    loadChildren: () => import('./pages/wykonane/wykonane.module').then( m => m.WykonanePageModule)
+    path: 'doneToDos',
+    loadChildren: () => import('./pages/doneToDos/doneToDos.module').then( m => m.DoneToDosPageModule)
   },
   {
     path: 'login',
