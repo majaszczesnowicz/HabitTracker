@@ -224,7 +224,7 @@ export class HomePage implements OnInit{
           counterRef.update({ habitCounter: increment });
         }
       });
-    }
+    } 
 
     onSelect(id, item) {
       this.dataService.setData(id, item);

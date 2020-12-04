@@ -8,11 +8,11 @@ import { CalendarComponent } from 'ionic2-calendar';
 import { ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-detail',
-  templateUrl: './detail.page.html',
-  styleUrls: ['./detail.page.scss'],
+  selector: 'app-finished-detail',
+  templateUrl: './finished-detail.page.html',
+  styleUrls: ['./finished-detail.page.scss'],
 })
-export class DetailPage implements OnInit {
+export class FinishedDetailPage implements OnInit {
   habit: any;
   date;
   uid = {}; 
@@ -63,8 +63,36 @@ export class DetailPage implements OnInit {
       {
         text: 'usuń',
         handler: () => {
-          this.db.doc(`users/${this.uid}/ongoingHabits/${habitId}`).delete();
-          this.router.navigateByUrl(`/`);
+          this.db.doc(`users/${this.uid}/finishedHabits/${habitId}`).delete();
+          this.router.navigateByUrl(`/finishedHabits`);
+        }
+      }
+      ],
+    });
+    return await alert.present();
+  }
+
+  async restore(habit) {
+    const alert = await this.alertCtrl.create({
+      header: 'czy chcesz przywrócić nawyk?',
+      message: 'jeśli chcesz jeszcze popracować nad tym nawykiem możesz przenieść go do trwających i zacząć od nowa',
+      buttons: [
+      {
+        text: 'anuluj',
+        role: 'cancel',
+        handler: () => {
+        }
+      },
+      {
+        text: 'przywróć',
+        handler: () => {
+          let today = new Date().toISOString();
+          this.db.doc(`users/${this.uid}/finishedHabits/${habit.id}`).delete();
+          let id = habit.id;
+          delete habit.id;
+          this.db.doc(`users/${this.uid}/ongoingHabits/${id}`).set(habit);
+          this.db.doc(`users/${this.uid}/ongoingHabits/${id}`).update({date: today});
+          this.router.navigateByUrl(`/finishedHabits`);
         }
       }
       ],
@@ -91,3 +119,4 @@ export class DetailPage implements OnInit {
   }
 
 }
+ 

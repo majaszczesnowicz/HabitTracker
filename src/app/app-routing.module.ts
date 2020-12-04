@@ -54,7 +54,15 @@ const routes: Routes = [
       habitData: DataResolverService
     },
     loadChildren: () => import('./pages/detail/detail.module').then( m => m.DetailPageModule)
+  },
+  {
+    path: 'finished-detail/:id',
+    resolve: {
+      habitData: DataResolverService
+    },
+    loadChildren: () => import('./finished-detail/finished-detail.module').then( m => m.FinishedDetailPageModule)
   }
+
 ];
 
 @NgModule({

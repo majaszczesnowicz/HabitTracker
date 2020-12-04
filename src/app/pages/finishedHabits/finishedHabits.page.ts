@@ -58,7 +58,7 @@ export class FinishedHabitsPage implements OnInit {
 
   onSelect(id, item) {
     this.dataService.setData(id, item);
-    this.router.navigateByUrl(`/detail/${id}`);
+    this.router.navigateByUrl(`/finished-detail/${id}`);
   }
 
 }
