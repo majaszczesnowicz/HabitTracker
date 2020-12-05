@@ -108,7 +108,8 @@ export class HomePage implements OnInit{
             color: this.randomColor,
             date: this.habit.date,
             duration: Number(this.habit.duration),
-            reminder: this.habit.reminder
+            reminder: this.habit.reminder,
+            goal: this.habit.goal
           }).then(docRef => {
             let habitDate = new Date(this.habit.date);
             let daysNumber = Number(this.habit.duration)+1;

@@ -34,5 +34,5 @@
     <ion-label>przypomnienie</ion-label>
     <ion-datetime displayFormat="H:mm" [(ngModel)]="habitTime" placeholder="godzina powiadomienia" cancelText="anuluj" doneText="zapisz" (ionCancel)="clear()"></ion-datetime>
   </ion-item>
-  <ion-button [disabled]="nameInput.invalid || dateInput.invalid || durationInput.invalid" expand="block" (click)="saveHabit()" class="ion-margin-top">zapisz</ion-button>
+  <ion-button [disabled]="nameInput.invalid || dateInput.invalid || durationInput.invalid" expand="block" (click)="save()" class="ion-margin-top">zapisz</ion-button>
 </ion-content>

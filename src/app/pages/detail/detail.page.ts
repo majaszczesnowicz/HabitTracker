@@ -18,6 +18,7 @@ export class DetailPage implements OnInit {
   uid = {}; 
   eventSource = [];
   viewTitle: string;
+  ifGoal = false;
 
   calendar = {
         mode: 'month',
@@ -76,6 +77,7 @@ export class DetailPage implements OnInit {
     if (this.route.snapshot.data['habitData']){
       this.habit = this.route.snapshot.data['habitData'];
     }
+    if(this.habit.goal != 0 && this.habit.goal <= this.habit.duration){this.ifGoal = true;}
   }
 
   next(){
