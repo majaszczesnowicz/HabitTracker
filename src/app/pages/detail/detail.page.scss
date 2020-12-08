@@ -10,9 +10,25 @@ div{
 
 ion-item{
     font-size: 18px;
+    margin-top: 6px;
     margin-left: 0px;
-    margin-top: 16px;
+    padding: 0px;
     color: #696969;
     --border-color: #FBD9B6;
 }
+
+ion-col{
+    padding: 0px;
+    margin: 0px;
+}
+
+h4{
+    margin: 0px;
+    padding: 0px;
+}
+
+.arrow{
+    margin: 0px;
+}
+
 

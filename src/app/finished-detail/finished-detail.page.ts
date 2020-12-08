@@ -18,9 +18,14 @@ export class FinishedDetailPage implements OnInit {
   uid = {}; 
   eventSource = [];
   viewTitle: string;
+  ifDesc = true;
+  ifGoal = false;
 
   calendar = {
         mode: 'month',
+        formatDayHeader: 'EEE',
+        formatMonthTitle: 'MMM yyyy',
+        startingDayMonth: '1',
         currentDate: new Date(),
         locale: 'pl-PL'
       };
@@ -104,6 +109,8 @@ export class FinishedDetailPage implements OnInit {
     if (this.route.snapshot.data['habitData']){
       this.habit = this.route.snapshot.data['habitData'];
     }
+    if(this.habit.goal != 0 && this.habit.goal <= this.habit.duration){this.ifGoal = true;}
+    if(!this.habit.description){this.ifDesc = false;}
   }
 
   next(){

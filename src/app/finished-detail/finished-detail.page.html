@@ -11,30 +11,38 @@
   </ion-toolbar>
 </ion-header>
 
-   
-    <ion-row>
-      <ion-col size="2">
-        <ion-button fill="clear" (click)="back()">
-          <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
-        </ion-button>
-      </ion-col>
+<ion-item *ngIf = "ifDesc">Opis: {{habit.description}}</ion-item>
+<ion-item *ngIf = "ifGoal">Cel: Przez co najmniej {{habit.goal}} dni uda mi się trzymać nawyku!</ion-item>
+<ion-content>
+<div>
+  <ion-grid>
+  <ion-row>
+    <ion-col size="2">
+      <ion-button class="arrow" fill="clear" (click)="back()">
+        <ion-icon color="medium" name="arrow-back" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-col>
 
-      <ion-col size="8"class="ion-text-center">
-        <h2>{{ viewTitle }}</h2>
-      </ion-col>
+    <ion-col  size="8" class="ion-text-center">
+      <h4>{{ viewTitle }}</h4>
+    </ion-col>
 
-      <ion-col size="2">
-        <ion-button fill="clear" (click)="next()">
-          <ion-icon name="arrow-forward" slot="icon-only"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-    <calendar
-    [eventSource]="eventSource"
-    [calendarMode]="calendar.mode"
-    [currentDate]="calendar.currentDate"
-    [locale]="calendar.locale"
-    (onTitleChanged)="onViewTitleChanged($event)">
-    
-    </calendar>
-
+    <ion-col  size="2">
+      <ion-button class="arrow" fill="clear" (click)="next()">
+        <ion-icon color="medium" name="arrow-forward" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+  <calendar
+  [eventSource]="eventSource"
+  [calendarMode]="calendar.mode"
+  [currentDate]="calendar.currentDate"
+  [locale]="calendar.locale"
+  [formatDayHeader]="calendar.formatDayHeader"
+  [formatMonthTitle]="calendar.formatMonthTitle"
+  [startingDayMonth]="calendar.startingDayMonth"
+  (onTitleChanged)="onViewTitleChanged($event)">
+  
+  </calendar>
+</div>

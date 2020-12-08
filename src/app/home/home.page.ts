@@ -195,6 +195,15 @@ export class HomePage implements OnInit{
         if(daysLeft == 3 || daysLeft == 2){return "/assets/custom-ion-icons/progress1.svg";}
         if(daysLeft == 1 || daysLeft == 0){return "/assets/custom-ion-icons/progress0.svg";}
       }
+      if(duration==21){
+        if(daysLeft == 20 || daysLeft == 19 || daysLeft == 18){return "/assets/custom-ion-icons/progress6.svg";}
+        if(daysLeft == 17 || daysLeft == 16 || daysLeft == 15){return "/assets/custom-ion-icons/progress5.svg";}
+        if(daysLeft == 14 || daysLeft == 13 || daysLeft == 12){return "/assets/custom-ion-icons/progress4.svg";}
+        if(daysLeft == 11 || daysLeft == 10 || daysLeft == 9){return "/assets/custom-ion-icons/progress3.svg";}
+        if(daysLeft == 8 || daysLeft == 7 || daysLeft == 6){return "/assets/custom-ion-icons/progress2.svg";}
+        if(daysLeft == 5 || daysLeft == 4 || daysLeft == 3){return "/assets/custom-ion-icons/progress1.svg";}
+        if(daysLeft == 2 || daysLeft == 1 || daysLeft == 0){return "/assets/custom-ion-icons/progress0.svg";}
+      }
       if(duration==28){
         if(daysLeft == 27 || daysLeft == 26 || daysLeft == 25 || daysLeft == 24){return "/assets/custom-ion-icons/progress6.svg";}
         if(daysLeft == 23 || daysLeft == 22 || daysLeft == 21 || daysLeft == 20){return "/assets/custom-ion-icons/progress5.svg";}
