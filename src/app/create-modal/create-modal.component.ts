@@ -2,7 +2,7 @@ import { ModalController } from '@ionic/angular';
 import { Component, OnInit} from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { AlertController } from '@ionic/angular';
-import { async } from '@angular/core/testing';
+import { setHours, setMinutes, setSeconds } from 'date-fns';
 
 @Component({
   selector: 'app-create-modal',
@@ -26,8 +26,8 @@ export class CreateModalComponent implements OnInit{
   ngOnInit(){
     this.habitTime = null;
     this.description = '';
-    const today = new Date();
-    this.minDate = new Date(today).toISOString();
+    let today = new Date();
+    this.minDate = this.setHour(today);
     this.maxDate = new Date(today.getFullYear() + 2, today.getMonth(), today.getDate());
     this.maxDate = new Date(this.maxDate).toISOString();
   }
@@ -80,6 +80,14 @@ export class CreateModalComponent implements OnInit{
         ]
       });
       return await alert.present();
+    }
+
+    setHour(date){
+      let toDate = new Date(date);
+      let newDate = setHours(toDate, 0);
+      newDate = setMinutes(newDate, 0);
+      newDate = setSeconds(newDate, 0);
+      return newDate.toISOString();
     }
 
 }

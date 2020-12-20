@@ -6,7 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { CalendarComponent } from 'ionic2-calendar';
 import { ViewChild } from '@angular/core';
-
+import { setHours, setMinutes, setSeconds, addDays, compareAsc, getYear, format } from 'date-fns';
+ 
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.page.html',
@@ -14,7 +15,7 @@ import { ViewChild } from '@angular/core';
 })
 export class DetailPage implements OnInit {
   habit: any;
-  date;
+  dates = [];
   uid = {}; 
   eventSource = [];
   viewTitle: string;
@@ -27,19 +28,21 @@ export class DetailPage implements OnInit {
         formatMonthTitle: 'MMM yyyy',
         startingDayMonth: '1',
         currentDate: new Date(),
-        locale: 'pl-PL'
+        locale: 'pl-PL',
+        autoSelect: false,
+        showEventDetail: false
       };
   
-  event = {
-    title: '',
-    desc: '',
-    startTime: null,
-    endTime: '',
-    allDay: true
-  };
+      event = {
+        id: '',
+        title: '',
+        startTime: '',
+        endTime: '',
+        allDay: true,
+        ifDone: false
+      };
     
   @ViewChild(CalendarComponent) myCal: CalendarComponent;
-  modalCtrl: any;
 
   constructor(public navCtrl: NavController,
               private afAuth: AngularFireAuth,
@@ -52,6 +55,23 @@ export class DetailPage implements OnInit {
       if (user) {
         this.uid = user.uid;
       }
+    });
+    this.afAuth.authState.subscribe(user => {
+      if (!user)
+        return;
+      this.db.collection(`users/${this.uid}/ongoingHabits/${this.habit.id}/days`, ref => {
+        let query = ref.orderBy('date');
+        return query;
+      }).snapshotChanges().subscribe(colSnap => {
+        colSnap.forEach(a => {
+          let item = a.payload.doc.data();
+          item['id'] = a.payload.doc.id;
+          this.dates.push(item);
+        });
+        for(let date of this.dates){
+        this.addEvent(date.id, date.date, date.ifDone);
+        }
+      });
     });
   }
 
@@ -85,6 +105,23 @@ export class DetailPage implements OnInit {
     if(!this.habit.description){this.ifDesc = false;}
   }
 
+  addEvent(id, date, ifDone){
+    let start = new Date(date);
+    start = setHours(start,0);
+    start = setMinutes(start,0);
+    start = setSeconds(start,0);
+    let eventCopy = {
+      id: id,
+      title: '',
+      startTime: new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate())),
+      endTime: new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate() + 1)),
+      allDay: true,
+      ifDone: ifDone
+    }
+    this.eventSource.push(eventCopy);
+    this.myCal.loadEvents();
+  }
+
   next(){
     this.myCal.slideNext();
   }
@@ -97,4 +134,77 @@ export class DetailPage implements OnInit {
     this.viewTitle = title;
   }
 
+  onTimeSelected = (ev: { selectedTime: Date, events: any[] }) => {
+    let id = ev.events[0].id;
+    let today = new Date();
+    today = new Date(getYear(today),today.getMonth(),today.getDate());
+    let date = new Date(getYear(ev.selectedTime),ev.selectedTime.getMonth(),ev.selectedTime.getDate());
+    if(compareAsc(today, date)==0 || compareAsc(today, date)==1){
+      this.alertCtrl.create({
+        header: format(ev.selectedTime, 'dd/MM/yyyy'),
+        message: 'czy tego dnia udało ci się trzymać nawyku?',
+        buttons: [
+          {
+            text: 'tak',
+            handler: () => {
+              this.db.doc(`users/${this.uid}/ongoingHabits/${this.habit.id}/days/${id}`).update(
+                {
+                  ifDone: true
+                });
+              ev.events[0].ifDone = true;
+              this.myCal.loadEvents();
+            }
+          },
+          {
+            text: 'nie',
+            role: 'cancel',
+            handler: () => {
+              this.db.doc(`users/${this.uid}/ongoingHabits/${this.habit.id}/days/${id}`).update(
+                {
+                  ifDone: false
+                });
+              ev.events[0].ifDone = false;
+              this.myCal.loadEvents();
+          }
+        }], 
+      }).then(alert => {
+        alert.present();
+      });      
+    }
+  }
+
+  markDisabled = (date: Date) => {
+    let startDate = new Date(this.habit.date);
+    startDate = setHours(startDate,0);
+    startDate = setMinutes(startDate,0);
+    startDate = setSeconds(startDate,0);
+    let endDate = addDays(startDate, (this.habit.duration));
+    if((compareAsc(date, endDate) == 1) || (compareAsc(startDate, date) == 1)){
+      return true;
+    }
+  }
+
+  getEventClass(events){
+    for (let i = 0; i < events.length; i++){
+      const event = events[i];
+      if (event.ifDone){
+        switch (this.habit.color) {
+          case "primary":
+            return "ifDone-truep";
+          case "secondary":
+            return "ifDone-trues";
+          case "tertiary":
+            return "ifDone-truet";
+          case "success":
+            return "ifDone-truess";
+          case "warning":
+            return "ifDone-truew";
+        } 
+        return "ifDone-truew";
+      }
+      else{
+        return "ifDone-false";
+      }
+    }
+  }
 }

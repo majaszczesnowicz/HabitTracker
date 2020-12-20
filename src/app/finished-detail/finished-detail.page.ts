@@ -4,7 +4,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { CalendarComponent } from 'ionic2-calendar';
 import { ViewChild } from '@angular/core';
 
 @Component({
@@ -16,30 +15,8 @@ export class FinishedDetailPage implements OnInit {
   habit: any;
   date;
   uid = {}; 
-  eventSource = [];
-  viewTitle: string;
   ifDesc = true;
   ifGoal = false;
-
-  calendar = {
-        mode: 'month',
-        formatDayHeader: 'EEE',
-        formatMonthTitle: 'MMM yyyy',
-        startingDayMonth: '1',
-        currentDate: new Date(),
-        locale: 'pl-PL'
-      };
-  
-  event = {
-    title: '',
-    desc: '',
-    startTime: null,
-    endTime: '',
-    allDay: true
-  };
-    
-  @ViewChild(CalendarComponent) myCal: CalendarComponent;
-  modalCtrl: any;
 
   constructor(public navCtrl: NavController,
               private afAuth: AngularFireAuth,
@@ -77,7 +54,7 @@ export class FinishedDetailPage implements OnInit {
     return await alert.present();
   }
 
-  async restore(habit) {
+  async restore() {
     const alert = await this.alertCtrl.create({
       header: 'czy chcesz przywrócić nawyk?',
       message: 'jeśli chcesz jeszcze popracować nad tym nawykiem możesz przenieść go do trwających i zacząć od nowa',
@@ -91,13 +68,31 @@ export class FinishedDetailPage implements OnInit {
       {
         text: 'przywróć',
         handler: () => {
-          let today = new Date().toISOString();
-          this.db.doc(`users/${this.uid}/finishedHabits/${habit.id}`).delete();
-          let id = habit.id;
-          delete habit.id;
-          this.db.doc(`users/${this.uid}/ongoingHabits/${id}`).set(habit);
-          this.db.doc(`users/${this.uid}/ongoingHabits/${id}`).update({date: today});
-          this.router.navigateByUrl(`/finishedHabits`);
+          let now = new Date();
+          let nowUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), 
+          now.getUTCMinutes(), now.getUTCSeconds()));
+          this.db.collection(`users/${this.uid}/ongoingHabits`).add({
+            name: this.habit.name, 
+            description: this.habit.description,
+            created: nowUtc,
+            color: this.habit.color,
+            date: now.toISOString(),
+            duration: this.habit.duration,
+            reminder: this.habit.reminder,
+            goal: this.habit.goal,
+            successDays: 0 
+          }).then(docRef => {
+            let habitDate = new Date();
+            let daysNumber = Number(this.habit.duration)+1;
+            for(let i = 1; i < daysNumber; i++){
+              let date =  new Date(habitDate.getFullYear(),habitDate.getMonth(),habitDate.getDate()+i).toISOString();
+              this.db.collection(`users/${this.uid}/ongoingHabits/${docRef.id}/days`).add({
+                date: date,
+                ifDone: false
+              })
+            }
+          });
+          this.router.navigateByUrl(`/`);
         }
       }
       ],
@@ -111,18 +106,6 @@ export class FinishedDetailPage implements OnInit {
     }
     if(this.habit.goal != 0 && this.habit.goal <= this.habit.duration){this.ifGoal = true;}
     if(!this.habit.description){this.ifDesc = false;}
-  }
-
-  next(){
-    this.myCal.slideNext();
-  }
-
-  back(){
-    this.myCal.slidePrev();
-  }
-
-  onViewTitleChanged(title) {
-    this.viewTitle = title;
   }
 
 }

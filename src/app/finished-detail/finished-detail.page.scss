@@ -1,20 +1,50 @@
 p{
     font-size: 18px;
     margin: 16px;
-    color: #696969;
 }
 
 div{
     margin: 16px;
 }
 
-ion-item{
+.primary{
     font-size: 18px;
     margin-top: 6px;
     margin-left: 0px;
     padding: 0px;
-    color: #696969;
+    --border-color: #CFA4BF;
+}
+
+.secondary{
+    font-size: 18px;
+    margin-top: 6px;
+    margin-left: 0px;
+    padding: 0px;
+    --border-color: #ECB2C0;
+}
+
+.tertiary{
+    font-size: 18px;
+    margin-top: 6px;
+    margin-left: 0px;
+    padding: 0px;
     --border-color: #FBD9B6;
+}
+
+.success{
+    font-size: 18px;
+    margin-top: 6px;
+    margin-left: 0px;
+    padding: 0px;
+    --border-color: #BFE1EA;
+}
+
+.warning{
+    font-size: 18px;
+    margin-top: 6px;
+    margin-left: 0px;
+    padding: 0px;
+    --border-color: #FCF1B9;
 }
 
 ion-col{

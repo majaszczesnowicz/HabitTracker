@@ -1,8 +1,20 @@
 ion-item-divider{
-    font-size: 1.1rem;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 ion-button{
-    font-size: 1.1rem;
+    font-size: 16px;
+    font-weight: bold;
     margin: 15px;
 }
+
+.smallerFont{
+    font-size: 14px;
+    margin-left: 8px;
+}
+
+ion-item-divider{
+    background-color:rgb(238, 238, 238);
+}
+

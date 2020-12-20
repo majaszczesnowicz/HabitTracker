@@ -60,13 +60,11 @@ export class UrgentToDosPage implements OnInit {
         text: 'anuluj',
         role: 'cancel',
         handler: () => {
-          console.log('anuluj');
         }
       },
       {
         text: 'dodaj',
         handler: (val) => {
-          console.log('dodaj');
           let now = new Date();
           let nowUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(),
           now.getUTCMinutes(), now.getUTCSeconds()));
@@ -111,7 +109,8 @@ export class UrgentToDosPage implements OnInit {
       if(!documentSnapshot.exists){
         counterRef.set(
           { taskCounter: 1,
-            habitCounter: 0
+            habitCounter: 0,
+            goalCounter: 0 
           });
       }
       else{
