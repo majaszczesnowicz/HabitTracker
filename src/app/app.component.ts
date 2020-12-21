@@ -27,7 +27,6 @@ export class AppComponent {
   }
 
   onToggleColorTheme(event){
-    console.log(event.detail.checked);
     if(event.detail.checked){
       document.body.setAttribute('color-theme', 'dark');
     }

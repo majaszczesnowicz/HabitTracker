@@ -5,14 +5,14 @@
         <ion-back-button defaultHref="/"></ion-back-button>
       </ion-buttons>
       <ion-buttons slot="end">
-        <ion-button (click)="del(habit.id)"><ion-icon name="trash-outline" color="dark" style="zoom:1.6"></ion-icon></ion-button>
+        <ion-button (click)="del(habit.id)"><ion-icon name="trash-outline" style="zoom:1.6"></ion-icon></ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
-  <ion-item *ngIf = "ifDesc">Opis: {{habit.description}}</ion-item>
-    <ion-item *ngIf = "ifGoal">Udało się zrealizować cel - {{habit.goal}}!</ion-item>
   <ion-content>
-    <div>
+    <ion-item class={{habit.color}} *ngIf = "ifDesc">opis: {{habit.description}}</ion-item>
+    <ion-item class={{habit.color}} *ngIf = "ifGoal">cel: przez co najmniej {{habit.goal}} dni uda mi się trzymać nawyku!</ion-item>
+    <div class="calendar">
       <ion-grid>
       <ion-row>
         <ion-col size="2">
@@ -21,8 +21,10 @@
           </ion-button>
         </ion-col>
 
-        <ion-col  size="8" class="ion-text-center">
-          <h4>{{ viewTitle }}</h4>
+        <ion-col size="8">
+          <div class="ion-text-center">
+            <ion-text color="medium">{{ viewTitle }}</ion-text>
+          </div>
         </ion-col>
 
         <ion-col  size="2">
@@ -40,11 +42,24 @@
       [formatDayHeader]="calendar.formatDayHeader"
       [formatMonthTitle]="calendar.formatMonthTitle"
       [startingDayMonth]="calendar.startingDayMonth"
-      (onTitleChanged)="onViewTitleChanged($event)">
-      
+      [autoSelect]="calendar.autoSelect"
+      (onTitleChanged)="onViewTitleChanged($event)"
+      (onTimeSelected)="onTimeSelected($event)"
+      [markDisabled]="markDisabled"
+      [showEventDetail]="calendar.showEventDetail"
+      [monthviewDisplayEventTemplate]="template">
       </calendar>
     </div>
-    <p>przypomnienia:</p>
+    <p class="reminders">przypomnienia:</p>
   </ion-content>   
+
+  <ng-template #template let-view="view" let-row="row" let-col="col">
+    <div *ngIf="view.dates[row*7+col].events.length; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+      <div class={{getEventClass(view.dates[row*7+col].events)}}>
+        {{view.dates[row*7+col].label}}
+      </div>
+    </ng-template>
+    <ng-template #elseBlock><div>{{view.dates[row*7+col].label}}</div></ng-template>
+  </ng-template>
       
- 

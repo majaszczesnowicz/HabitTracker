@@ -6,7 +6,7 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
 import { DataService } from '../data.service';
 import { Router } from '@angular/router';
-import { differenceInDays, isSameDay, compareAsc, addDays} from 'date-fns';
+import { differenceInDays, isSameDay, compareAsc, addDays, setHours, setMinutes, setSeconds, getYear } from 'date-fns';
 import * as firebase from 'firebase';
 
 @Component({
@@ -21,6 +21,7 @@ export class HomePage implements OnInit{
   started = false;
   randomColor;
   habit: any = {};
+  goalAchieved = false;
 
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore, public navCtrl: NavController, private router: Router,
@@ -60,7 +61,6 @@ export class HomePage implements OnInit{
                 item.message = `${item.daysLeft} dni do końca`;
               }
               item.icon = this.chooseIcon(item.daysLeft, item.duration);
-              console.log(item.icon);
             }
             else{
               if(item.daysLeft == 1){
@@ -76,7 +76,11 @@ export class HomePage implements OnInit{
     }
 
     ngOnInit(){
-     
+      var result = differenceInDays(
+        new Date(2020, 12, 18, 23, 0),
+        new Date(2020, 12, 18, 23, 0)
+      )
+      console.log(result);
     }
   
     async openModal(){
@@ -84,12 +88,12 @@ export class HomePage implements OnInit{
         component: CreateModalComponent
       });
 
-      const alert = await this.alertCtrl.create({
-        header: 'super!',
-        message: 'nowy nawyk został utworzony',
-        buttons: ['zamknij']
-      });
-
+        const alert = await this.alertCtrl.create({
+          header: 'super!',
+          message: 'nowy nawyk został utworzony',
+          buttons: ['zamknij']
+        });
+      
       await modal.present();
 
       await modal.onWillDismiss().then(async res => {
@@ -109,7 +113,8 @@ export class HomePage implements OnInit{
             date: this.habit.date,
             duration: Number(this.habit.duration),
             reminder: this.habit.reminder,
-            goal: this.habit.goal
+            goal: Number(this.habit.goal),
+            successDays: 0 
           }).then(docRef => {
             let habitDate = new Date(this.habit.date);
             let daysNumber = Number(this.habit.duration)+1;
@@ -122,7 +127,7 @@ export class HomePage implements OnInit{
             }
           });
           
-          if (this.items.length >= 20)
+          if (this.items.length >= 20){
             this.alertCtrl.create({
               header: 'to zbyt dużo nawyków na raz!',
               message: 'wyświetlane jest do 20 elementów',
@@ -130,12 +135,13 @@ export class HomePage implements OnInit{
             }).then(warning => {
               warning.present();
             });
+          }
 
-          await alert.present(); 
+            if(this.items.length < 20){
+              await alert.present(); 
+            }
         }
-          
       });
- 
     }
 
 
@@ -159,18 +165,23 @@ export class HomePage implements OnInit{
 
     countDays(date, days, item){
       let today = new Date();
-      let startDate = new Date(date);
+      today = new Date(getYear(today),today.getMonth(),today.getDate());
+      date = new Date(date);
+      let startDate = new Date(getYear(date),date.getMonth(),date.getDate());
       let endDate = addDays(startDate, (days-1));
+      console.log(today);
+      console.log(startDate);
+      console.log(endDate);
       if(isSameDay(startDate, today)){
         this.started = true;
-        return days;
+        return (days-1);
       }
       if((compareAsc(today, startDate) == 1 && (compareAsc(today, endDate) !== 1))|| (isSameDay(endDate, today))){
         this.started = true;
         return differenceInDays(endDate, today);
       }
       if(compareAsc(startDate, today) == 1){
-        return differenceInDays(startDate, today);
+          return differenceInDays(startDate, today);
       }
       if(compareAsc(today, endDate) == 1){
         this.completeHabit(item);
@@ -178,12 +189,8 @@ export class HomePage implements OnInit{
     }
 
     chooseIcon(daysLeft, duration){
-      if(daysLeft == duration){
-        return "/assets/custom-ion-icons/progress7.svg";
-      }
       if(duration==7){
         const r = daysLeft%7; 
-        console.log(r);
         return `/assets/custom-ion-icons/progress${r}.svg`;
       }
       if(duration==14){
@@ -220,18 +227,31 @@ export class HomePage implements OnInit{
       let id = item.id;
       delete item.id;
       this.db.doc(`users/${this.uid}/finishedHabits/${id}`).set(item);
-
+      let goalCounter;
+      if(this.goalAchieved){
+        goalCounter = 1;
+      }
+      else{goalCounter = 0}
       const increment = firebase.firestore.FieldValue.increment(1);
       const counterRef = this.db.collection('users').doc(`${this.uid}`).collection('counters').doc('counter'); 
       this.db.collection('users').doc(`${this.uid}`).collection('counters').doc('counter').ref.get().then((documentSnapshot) => {
         if(!documentSnapshot.exists){
           counterRef.set(
           { taskCounter: 0,
-            habitCounter: 1
+            habitCounter: 1,
+            goalCounter: goalCounter
           });
         }
         else{
-          counterRef.update({ habitCounter: increment });
+          if(this.goalAchieved){
+            counterRef.update(
+              { habitCounter: increment,
+                goalCounter: increment
+              });
+          }
+          else{
+            counterRef.update({ habitCounter: increment });
+          }
         }
       });
     } 
