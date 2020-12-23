@@ -7,6 +7,7 @@ import { AlertController } from '@ionic/angular';
 import { CalendarComponent } from 'ionic2-calendar';
 import { ViewChild } from '@angular/core';
 import { setHours, setMinutes, setSeconds, addDays, compareAsc, getYear, format } from 'date-fns';
+import * as firebase from 'firebase';
  
 @Component({
   selector: 'app-detail',
@@ -147,10 +148,17 @@ export class DetailPage implements OnInit {
           {
             text: 'tak',
             handler: () => {
+              const increment = firebase.firestore.FieldValue.increment(1);
               this.db.doc(`users/${this.uid}/ongoingHabits/${this.habit.id}/days/${id}`).update(
                 {
                   ifDone: true
                 });
+              if(ev.events[0].ifDone == false){
+                this.db.doc(`users/${this.uid}/ongoingHabits/${this.habit.id}`).update(
+                  {
+                    successDays: increment
+                  });
+              }
               ev.events[0].ifDone = true;
               this.myCal.loadEvents();
             }
@@ -159,10 +167,17 @@ export class DetailPage implements OnInit {
             text: 'nie',
             role: 'cancel',
             handler: () => {
+              const increment = firebase.firestore.FieldValue.increment(-1);
               this.db.doc(`users/${this.uid}/ongoingHabits/${this.habit.id}/days/${id}`).update(
                 {
                   ifDone: false
                 });
+              if(ev.events[0].ifDone == true){
+                this.db.doc(`users/${this.uid}/ongoingHabits/${this.habit.id}`).update(
+                  {
+                    successDays: increment
+                  });
+              }
               ev.events[0].ifDone = false;
               this.myCal.loadEvents();
           }

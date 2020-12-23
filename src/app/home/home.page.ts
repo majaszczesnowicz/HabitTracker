@@ -16,12 +16,12 @@ import * as firebase from 'firebase';
 })
 export class HomePage implements OnInit{
   items = [];
+  successDays = [];
   uid = {};
   loading = true;
   started = false;
   randomColor;
   habit: any = {};
-  goalAchieved = false;
 
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore, public navCtrl: NavController, private router: Router,
@@ -76,11 +76,6 @@ export class HomePage implements OnInit{
     }
 
     ngOnInit(){
-      var result = differenceInDays(
-        new Date(2020, 12, 18, 23, 0),
-        new Date(2020, 12, 18, 23, 0)
-      )
-      console.log(result);
     }
   
     async openModal(){
@@ -169,9 +164,6 @@ export class HomePage implements OnInit{
       date = new Date(date);
       let startDate = new Date(getYear(date),date.getMonth(),date.getDate());
       let endDate = addDays(startDate, (days-1));
-      console.log(today);
-      console.log(startDate);
-      console.log(endDate);
       if(isSameDay(startDate, today)){
         this.started = true;
         return (days-1);
@@ -223,12 +215,15 @@ export class HomePage implements OnInit{
     }
 
     completeHabit(item){
+      let goalAchieved = false;
       this.db.doc(`users/${this.uid}/ongoingHabits/${item.id}`).delete();
       let id = item.id;
-      delete item.id;
       this.db.doc(`users/${this.uid}/finishedHabits/${id}`).set(item);
+      if(item.successDays >= item.goal){
+        goalAchieved = true;
+      }
       let goalCounter;
-      if(this.goalAchieved){
+      if(goalAchieved){
         goalCounter = 1;
       }
       else{goalCounter = 0}
@@ -243,7 +238,7 @@ export class HomePage implements OnInit{
           });
         }
         else{
-          if(this.goalAchieved){
+          if(goalAchieved){
             counterRef.update(
               { habitCounter: increment,
                 goalCounter: increment
@@ -254,6 +249,7 @@ export class HomePage implements OnInit{
           }
         }
       });
+      delete item.id;
     } 
 
     onSelect(id, item) {

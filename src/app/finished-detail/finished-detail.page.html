@@ -12,5 +12,7 @@
 </ion-header>
 <ion-content>
   <ion-item class={{habit.color}} *ngIf = "ifDesc">opis: {{habit.description}}</ion-item>
-  <ion-item class={{habit.color}} *ngIf = "ifGoal">cel: przez co najmniej {{habit.goal}} dni uda mi się trzymać nawyku!</ion-item>
+  <ion-item class={{habit.color}} *ngIf = "ifGoal">cel: {{habit.goal}}</ion-item>
+  <ion-item class={{habit.color}} *ngIf = "ifGoal">czas trwania: {{habit.duration}}</ion-item>
+  <ion-item class={{habit.color}} *ngIf = "ifGoal">ile dni udało się trzymać nawyku: {{habit.successDays}}</ion-item>
 </ion-content>
