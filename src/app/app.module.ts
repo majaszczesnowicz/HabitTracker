@@ -17,6 +17,10 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from 'src/environments/environment';
 import { LoginPageModule } from './pages/login/login.module';
 
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+
+import { ServiceWorkerModule } from '@angular/service-worker';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -28,7 +32,12 @@ import { LoginPageModule } from './pages/login/login.module';
     AngularFirestoreModule,
     AngularFireAuthModule,
     LoginPageModule,
-    DetailPageModule
+    DetailPageModule,
+    ServiceWorkerModule.register('combined-sw.js', {
+      enabled: environment.production,
+    }),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireMessagingModule,
   ],
   providers: [
     StatusBar,
