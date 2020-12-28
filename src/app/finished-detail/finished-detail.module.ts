@@ -7,6 +7,7 @@ import { FinishedDetailPage } from './finished-detail.page';
 import { NgCalendarModule } from 'ionic2-calendar';
 import { registerLocaleData } from '@angular/common';
 import localePl from '@angular/common/locales/pl';
+import { Chart } from 'chart.js';
 registerLocaleData(localePl);
 
 @NgModule({
@@ -15,7 +16,8 @@ registerLocaleData(localePl);
     FormsModule,
     IonicModule,
     NgCalendarModule,
-    FinishedDetailPageRoutingModule
+    FinishedDetailPageRoutingModule,
+    Chart
   ],
   declarations: [FinishedDetailPage],
   providers: [

@@ -19,8 +19,6 @@ import { LoginPageModule } from './pages/login/login.module';
 
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 
-import { ServiceWorkerModule } from '@angular/service-worker';
-
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -33,9 +31,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     AngularFireAuthModule,
     LoginPageModule,
     DetailPageModule,
-    ServiceWorkerModule.register('combined-sw.js', {
-      enabled: environment.production,
-    }),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireMessagingModule,
   ],
