@@ -12,19 +12,33 @@
 </ion-header>
 <ion-content>
   <ion-item class={{habit.color}} *ngIf = "ifDesc">opis: {{habit.description}}</ion-item>
-  <ion-item class={{habit.color}} *ngIf = "ifGoal">cel: {{habit.goal}}</ion-item>
-  <ion-item class={{habit.color}}>czas trwania: {{habit.duration}}</ion-item>
-  <ion-item class={{habit.color}}>ile dni udało się trzymać nawyku: {{habit.successDays}}</ion-item>
-</ion-content>
-=======
+  <div>
+    <p class="p-f-d">{{message1}}</p>
+    <canvas #doughnutCanvas></canvas>
+  </div>
+  <ion-card *ngIf = "ifGoal"> 
+    <ion-card-header>
+      <ion-row>
+        <ion-col>      
+          <ion-card-subtitle>cel:</ion-card-subtitle>
+          <ion-card-title>{{goal}}</ion-card-title>
+        </ion-col>
+        <ion-col class="right">
+          <ion-icon name="trophy" color={{iconColor}} style="zoom:3.0">
+          </ion-icon>
+         </ion-col>
+        </ion-row>
+    </ion-card-header>
+    <p class="p-f-d">{{message2}}</p>
+  </ion-card>
+  <ion-card color={{habit.color}}>
+    <ion-card-header>
+      <ion-row>    
+          <ion-card-subtitle>świetnie, że</ion-card-subtitle>
+          <ion-card-title>pracujesz nad swoimi przyzwyczajeniami!</ion-card-title>
+      </ion-row>
+    </ion-card-header>
+    <p class="text">możesz nadal monitorować ten nawyk, przywracając go lub utworzyć nowy</p>
+  </ion-card>
 </ion-content>
 
-    <ion-card>
-      <ion-card-header>
-        Doughnut Chart
-      </ion-card-header>
-      <ion-card-content>
-        <canvas #doughnutCanvas></canvas>
-      </ion-card-content>
-    </ion-card>
->>>>>>> 96d33656fcb532f183d54851a1e3f4987a1653e8

@@ -28,11 +28,8 @@
     "@ionic-native/status-bar": "^5.0.0",
     "@ionic/angular": "^5.0.0",
     "angularfire2": "^5.4.2",
-<<<<<<< HEAD
-    "cordova-android": "9.0.0",
-=======
     "chart.js": "^2.9.4",
->>>>>>> 96d33656fcb532f183d54851a1e3f4987a1653e8
+    "cordova-android": "9.0.0",
     "date-fns": "^2.16.1",
     "firebase": "^7.19.1",
     "firebaseui": "^4.6.1",
@@ -79,7 +76,6 @@
     "tslint": "~6.1.0",
     "typescript": "~3.8.3"
   },
-<<<<<<< HEAD
   "description": "An Ionic project",
   "cordova": {
     "plugins": {
@@ -97,7 +93,4 @@
       "ios"
     ]
   }
-=======
-  "description": "An Ionic project"
->>>>>>> 96d33656fcb532f183d54851a1e3f4987a1653e8
 }

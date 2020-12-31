@@ -20,11 +20,6 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 
-<<<<<<< HEAD
-//import { ServiceWorkerModule } from '@angular/service-worker';
-
-=======
->>>>>>> 96d33656fcb532f183d54851a1e3f4987a1653e8
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -37,12 +32,6 @@ import { AngularFireMessagingModule } from '@angular/fire/messaging';
     AngularFireAuthModule,
     LoginPageModule,
     DetailPageModule,
-<<<<<<< HEAD
-    //ServiceWorkerModule.register('combined-sw.js', {
-     // enabled: environment.production,
-    //}),
-=======
->>>>>>> 96d33656fcb532f183d54851a1e3f4987a1653e8
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireMessagingModule,
   ],

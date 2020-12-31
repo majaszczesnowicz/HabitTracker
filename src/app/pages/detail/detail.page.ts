@@ -105,7 +105,7 @@ export class DetailPage implements OnInit {
     }
     if(this.habit.goal != 0 && this.habit.goal <= this.habit.duration){this.ifGoal = true;}
     if(!this.habit.description){this.ifDesc = false;}
-  }
+  } 
 
   addEvent(id, date, ifDone){
     let start = new Date(date);
@@ -215,8 +215,7 @@ export class DetailPage implements OnInit {
             return "ifDone-truess";
           case "warning":
             return "ifDone-truew";
-        } 
-        return "ifDone-truew";
+        }
       }
       else{
         return "ifDone-false";

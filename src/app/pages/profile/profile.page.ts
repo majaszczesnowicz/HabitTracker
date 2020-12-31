@@ -47,8 +47,7 @@ export class ProfilePage implements OnInit {
           body: "Body",
           id: 1,
           schedule: { 
-            //at: new Date(Date.now() + 1000 * 5) ,
-            on: {hour: 22, minute: 0}
+            at: new Date(Date.now() + 1000 * 5)
           },
           sound: null,
           attachments: null,

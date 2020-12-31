@@ -19,6 +19,12 @@ ion-button {
     font-weight: bold;
     font-style: italic;
   }
+
+  .p-f-d{
+    color: #696969;
+    font-size: 16px;
+    text-align: center;
+  }
   /** primary **/
   --ion-color-primary: #CFA4BF;
   --ion-color-primary-rgb: 56, 128, 255;
@@ -104,6 +110,12 @@ ion-button {
   .monthview-disabled{
     background-color: #1e1e1e  !important;
     color: #ffffff !important;
+  }
+
+  .p-f-d{
+    color:  #ffffff;
+    font-size: 16px;
+    text-align: center;
   }
 
   .monthview-current {
@@ -194,6 +206,12 @@ ion-button {
       color: #ffffff !important;
     }
 
+    .p-f-d{
+      color:  #ffffff;
+      font-size: 16px;
+      text-align: center;
+    }
+
     .monthview-current {
       font-weight: bold;
       font-style: italic;
@@ -238,6 +256,12 @@ ion-button {
     --ion-text-color-rgb: 255,255,255;
 
     --ion-border-color: #222222;
+
+    .p-f-d{
+      color:  #ffffff;
+      font-size: 16px;
+      text-align: center;
+    }
 
     .monthview-disabled{
       background-color: #1e1e1e  !important;

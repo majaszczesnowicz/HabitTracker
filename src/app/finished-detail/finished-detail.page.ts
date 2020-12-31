@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, AfterViewInit } from '@angular/core';
 import { NavController, NavParams } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -18,13 +18,14 @@ export class FinishedDetailPage implements OnInit {
   uid = {}; 
   ifDesc = true;
   ifGoal = false;
-  @ViewChild("barCanvas") barCanvas: ElementRef;
-  @ViewChild("doughnutCanvas") doughnutCanvas: ElementRef;
-  @ViewChild("lineCanvas") lineCanvas: ElementRef;
+  iconColor = "medium";
+  goal = "";
+  message1 = "";
+  message2 = "";
 
-  private barChart: Chart;
-  private doughnutChart: Chart;
-  private lineChart: Chart;
+  @ViewChild('doughnutCanvas') private doughnutCanvas: ElementRef;
+
+  doughnutChart: Chart;
 
   constructor(public navCtrl: NavController,
               private afAuth: AngularFireAuth,
@@ -38,6 +39,51 @@ export class FinishedDetailPage implements OnInit {
         this.uid = user.uid;
       }
     });
+  }
+
+  ngAfterViewInit() {
+    this.doughnutChartMethod();
+  }
+
+  doughnutChartMethod(){
+    let color;
+    color = this.chooseColor(this.habit.color);
+    this.doughnutChart = new Chart(this.doughnutCanvas.nativeElement, {
+      type: "doughnut",
+      options: {
+        legend: {
+          display: false
+        }
+      },
+      data: {
+        labels: ["nie udało się trzymać nawyku", "udało się trzymać nawyku"],
+        datasets: [
+          {
+            data: [(this.habit.duration-this.habit.successDays), this.habit.successDays],
+            backgroundColor: [
+              "#eeeeee",
+              color
+            ],
+            hoverBackgroundColor: ["#eeeeee", color]
+          }
+        ]
+      }
+    });
+  }
+
+  chooseColor(hColor){
+    switch (hColor) {
+      case "primary":
+        return "#CFA4BF";
+      case "secondary":
+        return "#ECB2C0";
+      case "tertiary":
+        return "#FBD9B6";
+      case "success":
+        return "#BFE1EA";
+      case "warning":
+        return "#FCF1B9";
+    }
   }
 
   async del(habitId) {
@@ -109,30 +155,37 @@ export class FinishedDetailPage implements OnInit {
   }
 
   ngOnInit() {
-    if (this.route.snapshot.data['habitData']){
+    if(this.route.snapshot.data['habitData']){
       this.habit = this.route.snapshot.data['habitData'];
     }
-    if(this.habit.goal != 0 && this.habit.goal <= this.habit.duration){this.ifGoal = true;}
-    if(!this.habit.description){this.ifDesc = false;}
-    
-    this.doughnutChart = new Chart(this.doughnutCanvas.nativeElement, {
-      type: "doughnut",
-      data: {
-        labels: ["duration", "successDays"],
-        datasets: [
-          {
-            label: "# of Votes",
-            data: [this.habit.duration, this.habit.successDays],
-            backgroundColor: [
-              "rgba(238, 238, 238, 0.2)",
-              this.habit.color
-            ],
-            hoverBackgroundColor: ["#FF6384", "#36A2EB"]
-          }
-        ]
+    if(this.habit.goal != 0 && this.habit.goal <= this.habit.duration){
+      this.ifGoal = true;
+      this.message2 = this.getMessage2();
+      this.goal = this.goalMessage();
+      if(this.habit.successDays >= this.habit.goal){
+        this.iconColor = this.habit.color;
       }
-    });
+    }
+    if(!this.habit.description){this.ifDesc = false;}
+    this.message1 = this.getMessage();
+  }
 
+  getMessage(){
+    return `udało ci się trzymać nawyku przez ${this.habit.successDays} z ${this.habit.duration} dni`;
+  }
+
+  getMessage2(){
+    if(this.habit.successDays >= this.habit.goal){
+      return `udało ci się osiągnąć wyznaczony cel, gratulacje!`;
+    }
+    else{
+      return `nie udało ci się osiągnąć wyznaczonego celu ale nie poddawaj się!`;
+    }
+  }
+
+  goalMessage(){
+    if(this.habit.goal ==1){return "1 dzień";}
+      else{return `${this.habit.goal} dni`;}
   }
 }
 
