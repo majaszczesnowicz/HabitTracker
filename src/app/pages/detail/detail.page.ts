@@ -42,8 +42,9 @@ export class DetailPage implements OnInit {
         allDay: true,
         ifDone: false
       };
-    
+
   @ViewChild(CalendarComponent) myCal: CalendarComponent;
+  
 
   constructor(public navCtrl: NavController,
               private afAuth: AngularFireAuth,
@@ -223,3 +224,6 @@ export class DetailPage implements OnInit {
     }
   }
 }
+
+
+

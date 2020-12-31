@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { NavController, NavParams } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ViewChild } from '@angular/core';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-finished-detail',
@@ -17,6 +18,13 @@ export class FinishedDetailPage implements OnInit {
   uid = {}; 
   ifDesc = true;
   ifGoal = false;
+  @ViewChild("barCanvas") barCanvas: ElementRef;
+  @ViewChild("doughnutCanvas") doughnutCanvas: ElementRef;
+  @ViewChild("lineCanvas") lineCanvas: ElementRef;
+
+  private barChart: Chart;
+  private doughnutChart: Chart;
+  private lineChart: Chart;
 
   constructor(public navCtrl: NavController,
               private afAuth: AngularFireAuth,
@@ -106,7 +114,28 @@ export class FinishedDetailPage implements OnInit {
     }
     if(this.habit.goal != 0 && this.habit.goal <= this.habit.duration){this.ifGoal = true;}
     if(!this.habit.description){this.ifDesc = false;}
-  }
+    
+    this.doughnutChart = new Chart(this.doughnutCanvas.nativeElement, {
+      type: "doughnut",
+      data: {
+        labels: ["duration", "successDays"],
+        datasets: [
+          {
+            label: "# of Votes",
+            data: [this.habit.duration, this.habit.successDays],
+            backgroundColor: [
+              "rgba(238, 238, 238, 0.2)",
+              this.habit.color
+            ],
+            hoverBackgroundColor: ["#FF6384", "#36A2EB"]
+          }
+        ]
+      }
+    });
 
+  }
 }
+
+
+
  
