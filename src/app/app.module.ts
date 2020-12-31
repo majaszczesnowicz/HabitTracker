@@ -16,10 +16,11 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import { environment } from 'src/environments/environment';
 import { LoginPageModule } from './pages/login/login.module';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 
-import { ServiceWorkerModule } from '@angular/service-worker';
+//import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,15 +34,16 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     AngularFireAuthModule,
     LoginPageModule,
     DetailPageModule,
-    ServiceWorkerModule.register('combined-sw.js', {
-      enabled: environment.production,
-    }),
+    //ServiceWorkerModule.register('combined-sw.js', {
+     // enabled: environment.production,
+    //}),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireMessagingModule,
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    LocalNotifications,
     NavParams,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

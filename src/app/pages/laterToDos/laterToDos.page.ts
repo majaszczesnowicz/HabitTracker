@@ -13,6 +13,7 @@ export class LaterToDosPage implements OnInit {
   items = [];
   uid = {};
   loading = true;
+  noItems = false;
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore,
     private alertCtrl: AlertController ) {
@@ -28,7 +29,7 @@ export class LaterToDosPage implements OnInit {
         return;
       this.db.collection(`users/${this.uid}/laterToDos`, ref => {
         let query = ref.orderBy('pos','desc');
-        query = query.limit(2);
+        query = query.limit(100);
         return query;
       }).snapshotChanges().subscribe(colSnap => {
         this.items = [];
@@ -38,6 +39,7 @@ export class LaterToDosPage implements OnInit {
           this.items.push(item);
         });
         this.loading = false;
+        if(this.items.length == 0){this.noItems = true;}
       });
     });
   }
@@ -67,7 +69,7 @@ export class LaterToDosPage implements OnInit {
           let now = new Date();
           let nowUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(),
           now.getUTCMinutes(), now.getUTCSeconds()));
-
+          this.noItems = false;
           this.db.collection(`users/${this.uid}/laterToDos`).add({
             text: val.zadanie,
             pos: this.getPosition(),

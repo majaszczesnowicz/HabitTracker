@@ -13,6 +13,8 @@
 <ion-content>
 
   <ion-spinner *ngIf = "loading" color="success"></ion-spinner>
+
+  <p class="info" *ngIf = "noItems">wybierz "+" aby zacząć monitorować nawyki!</p>
   
   <ion-card *ngFor="let item of items" color={{item.color}}>
     <ion-item (click)="onSelect(item.id, item)" detail="true" lines="none">

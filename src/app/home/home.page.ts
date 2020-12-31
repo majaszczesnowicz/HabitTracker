@@ -20,6 +20,7 @@ export class HomePage implements OnInit{
   uid = {};
   loading = true;
   started = false;
+  noItems = false;
   randomColor;
   habit: any = {};
 
@@ -45,6 +46,7 @@ export class HomePage implements OnInit{
             this.items.push(item);
           });
           this.loading = false;
+          if(this.items.length == 0){this.noItems = true;}
           for(let item of this.items){
             this.started = false;
             item.message = "";
@@ -94,7 +96,7 @@ export class HomePage implements OnInit{
       await modal.onWillDismiss().then(async res => {
         if(res.data != null){
           this.habit = res.data;
-
+          this.noItems = false;
           let now = new Date();
           let nowUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), 
           now.getUTCMinutes(), now.getUTCSeconds()));
@@ -251,9 +253,9 @@ export class HomePage implements OnInit{
       });
       delete item.id;
     } 
-
+ 
     onSelect(id, item) {
       this.dataService.setData(id, item);
-      this.router.navigateByUrl(`/detail/${id}`);
+      this.router.navigateByUrl(`/detail/${id}`);  
     }
   }
