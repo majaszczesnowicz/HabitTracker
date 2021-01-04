@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { CalendarComponent } from 'ionic2-calendar';
 import { ViewChild } from '@angular/core';
-import { setHours, setMinutes, setSeconds, addDays, compareAsc, getYear, format } from 'date-fns';
+import { setHours, setMinutes, setSeconds, addDays, compareAsc, getYear, format} from 'date-fns';
 import * as firebase from 'firebase';
  
 @Component({
@@ -22,6 +22,8 @@ export class DetailPage implements OnInit {
   viewTitle: string;
   ifGoal = false;
   ifDesc = true;
+  goalMessage = "";
+  remHour;
 
   calendar = {
         mode: 'month',
@@ -103,8 +105,19 @@ export class DetailPage implements OnInit {
     if (this.route.snapshot.data['habitData']){
       this.habit = this.route.snapshot.data['habitData'];
     }
-    if(this.habit.goal != 0 && this.habit.goal <= this.habit.duration){this.ifGoal = true;}
+    if(this.habit.goal != 0 && this.habit.goal <= this.habit.duration){
+      this.ifGoal = true;
+      if(this.habit.goal != 1){
+        this.goalMessage = `cel: trzymać się postanowienia przez co najmniej ${this.habit.goal} dni`;
+      }
+      else{
+        this.goalMessage = "cel: trzymać się postanowienia przez co najmniej 1 dzień";
+      }
+    }
     if(!this.habit.description){this.ifDesc = false;}
+    if(this.habit.reminder){
+      this.remHour = this.getRemHour();
+    }
   } 
 
   addEvent(id, date, ifDone){
@@ -144,7 +157,7 @@ export class DetailPage implements OnInit {
     if(compareAsc(today, date)==0 || compareAsc(today, date)==1){
       this.alertCtrl.create({
         header: format(ev.selectedTime, 'dd/MM/yyyy'),
-        message: 'czy tego dnia udało ci się trzymać nawyku?',
+        message: 'czy tego dnia udało ci się trzymać postanowienia?',
         buttons: [
           {
             text: 'tak',
@@ -221,6 +234,11 @@ export class DetailPage implements OnInit {
         return "ifDone-false";
       }
     }
+  }
+
+  getRemHour(){
+    let hour = new Date(this.habit.reminder);
+    return format(hour, 'HH:mm');
   }
 }
 

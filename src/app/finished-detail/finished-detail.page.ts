@@ -5,7 +5,10 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ViewChild } from '@angular/core';
+import { differenceInDays, isSameDay, compareAsc, addDays, setHours, setMinutes, setSeconds, getYear, getTime } from 'date-fns';
+import { Plugins, LocalNotificationEnabledResult, LocalNotificationActionPerformed, LocalNotification, Device} from '@capacitor/core';
 import { Chart } from 'chart.js';
+const {LocalNotifications} = Plugins;
 
 @Component({
   selector: 'app-finished-detail',
@@ -123,27 +126,51 @@ export class FinishedDetailPage implements OnInit {
         text: 'przywróć',
         handler: () => {
           let now = new Date();
-          let nowUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), 
-          now.getUTCMinutes(), now.getUTCSeconds()));
           this.db.collection(`users/${this.uid}/ongoingHabits`).add({
             name: this.habit.name, 
             description: this.habit.description,
-            created: nowUtc,
+            created: now.toISOString(),
             color: this.habit.color,
             date: now.toISOString(),
             duration: this.habit.duration,
             reminder: this.habit.reminder,
             goal: this.habit.goal,
             successDays: 0 
-          }).then(docRef => {
+          }).then(async docRef => {
             let habitDate = new Date();
             let daysNumber = Number(this.habit.duration)+1;
             for(let i = 1; i < daysNumber; i++){
-              let date =  new Date(habitDate.getFullYear(),habitDate.getMonth(),habitDate.getDate()+i).toISOString();
+              let dateDay = new Date(habitDate.getFullYear(),habitDate.getMonth(),habitDate.getDate()+i);
+              let date =  dateDay.toISOString();
               this.db.collection(`users/${this.uid}/ongoingHabits/${docRef.id}/days`).add({
                 date: date,
                 ifDone: false
-              })
+              });
+              if(this.habit.reminder){
+                let reminder = new Date(this.habit.reminder);
+                let reminderDate = new Date(getYear(dateDay),dateDay.getMonth(),dateDay.getDate()-1,reminder.getHours(),reminder.getMinutes());
+                let id = getTime(now);
+                id = id + i;
+                console.log(reminderDate);
+                console.log(id);
+                await LocalNotifications.schedule({
+                  notifications: [
+                    {
+                      title: "przypomnienie",
+                      body: `monitoruj nawyk: ${this.habit.name}`,
+                      id: id,
+                      schedule: { 
+                        at: reminderDate
+                      },
+                      attachments: null,
+                      actionTypeId: "",
+                      extra: null,
+                      smallIcon: "res://icon",
+                      sound: "file://juntos.mp3"
+                    }
+                  ]
+                });
+              }
             }
           });
           this.router.navigateByUrl(`/`);
@@ -171,7 +198,7 @@ export class FinishedDetailPage implements OnInit {
   }
 
   getMessage(){
-    return `udało ci się trzymać nawyku przez ${this.habit.successDays} z ${this.habit.duration} dni`;
+    return `${this.habit.successDays} z ${this.habit.duration} dni`;
   }
 
   getMessage2(){

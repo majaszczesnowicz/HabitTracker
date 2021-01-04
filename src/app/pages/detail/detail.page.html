@@ -11,7 +11,7 @@
   </ion-header>
   <ion-content>
     <ion-item class={{habit.color}} *ngIf = "ifDesc">opis: {{habit.description}}</ion-item>
-    <ion-item class={{habit.color}} *ngIf = "ifGoal">cel: przez co najmniej {{habit.goal}} dni uda mi się trzymać nawyku!</ion-item>
+    <ion-item class={{habit.color}} *ngIf = "ifGoal">{{goalMessage}}</ion-item>
     <div class="calendar">
       <ion-grid>
       <ion-row>
@@ -50,7 +50,8 @@
       [monthviewDisplayEventTemplate]="template">
       </calendar>
     </div>
-    <p class="reminders">przypomnienia:</p>
+    <p class="p-f-d2">monitoruj nawyk i zaznaczaj w kalendarzu dni, w które udało ci się trzymać postanowienia</p>
+    <ion-item class={{habit.color}} *ngIf = "habit.reminder">przypomnienie codziennie o {{remHour}}</ion-item>
   </ion-content>   
 
   <ng-template #template let-view="view" let-row="row" let-col="col">

@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Plugins, LocalNotificationEnabledResult, LocalNotificationActionPerformed, LocalNotification, Device} from '@capacitor/core';
 import { NavController, AlertController, Platform } from '@ionic/angular';
+import { getTime } from 'date-fns';
 const {LocalNotifications} = Plugins;
 
 @Component({
@@ -40,20 +41,22 @@ export class ProfilePage implements OnInit {
   } 
 
   async scheduleBasic(){
+    let date = new Date(Date.now() + 1000 * 5);
+    let num = getTime(date);
+    console.log(num);
     await LocalNotifications.schedule({
       notifications: [
         {
           title: "Title",
           body: "Body",
-          id: 1,
+          id: num,
           schedule: { 
-            at: new Date(Date.now() + 1000 * 5)
+            at: date
           },
-          sound: null,
           attachments: null,
           actionTypeId: "",
           extra: null,
-          smallIcon: "res://ic_notif_icon"
+          smallIcon: "res://icon"
         }
       ]
     });

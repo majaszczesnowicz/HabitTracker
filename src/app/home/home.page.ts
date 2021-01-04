@@ -6,8 +6,10 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
 import { DataService } from '../data.service';
 import { Router } from '@angular/router';
-import { differenceInDays, isSameDay, compareAsc, addDays, setHours, setMinutes, setSeconds, getYear } from 'date-fns';
+import { differenceInDays, isSameDay, compareAsc, addDays, setHours, setMinutes, setSeconds, getYear, getTime } from 'date-fns';
+import { Plugins, LocalNotificationEnabledResult, LocalNotificationActionPerformed, LocalNotification, Device} from '@capacitor/core';
 import * as firebase from 'firebase';
+const {LocalNotifications} = Plugins;
 
 @Component({
   selector: 'app-home',
@@ -77,7 +79,8 @@ export class HomePage implements OnInit{
       });
     }
 
-    ngOnInit(){
+    async ngOnInit(){
+      await LocalNotifications.requestPermission();
     }
   
     async openModal(){
@@ -98,29 +101,53 @@ export class HomePage implements OnInit{
           this.habit = res.data;
           this.noItems = false;
           let now = new Date();
-          let nowUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), 
-          now.getUTCMinutes(), now.getUTCSeconds()));
           this.randomColor = this.randomNumber();
   
           this.db.collection(`users/${this.uid}/ongoingHabits`).add({
             name: this.habit.name, 
             description: this.habit.description,
-            created: nowUtc,
+            created: now.toISOString(),
             color: this.randomColor,
             date: this.habit.date,
             duration: Number(this.habit.duration),
             reminder: this.habit.reminder,
             goal: Number(this.habit.goal),
             successDays: 0 
-          }).then(docRef => {
+          }).then(async docRef => {
             let habitDate = new Date(this.habit.date);
             let daysNumber = Number(this.habit.duration)+1;
             for(let i = 1; i < daysNumber; i++){
-              let date =  new Date(habitDate.getFullYear(),habitDate.getMonth(),habitDate.getDate()+i).toISOString();
+              let dateDay = new Date(habitDate.getFullYear(),habitDate.getMonth(),habitDate.getDate()+i);
+              let date =  dateDay.toISOString();
               this.db.collection(`users/${this.uid}/ongoingHabits/${docRef.id}/days`).add({
                 date: date,
                 ifDone: false
-              })
+              });
+              if(this.habit.reminder){
+                let reminder = new Date(this.habit.reminder);
+                let reminderDate = new Date(getYear(dateDay),dateDay.getMonth(),dateDay.getDate()-1,reminder.getHours(),reminder.getMinutes());
+                let id = getTime(now);
+                id = id + i;
+                console.log(reminderDate);
+                console.log(id);
+                await LocalNotifications.schedule({
+                  notifications: [
+                    {
+                      title: "przypomnienie",
+                      body: `monitoruj nawyk: ${this.habit.name}`,
+                      id: id,
+                      schedule: { 
+                        at: reminderDate
+                      },
+                      attachments: null,
+                      actionTypeId: "",
+                      extra: null,
+                      smallIcon: "res://icon",
+                      sound: "file://juntos.mp3"
+                    }
+                  ]
+                });
+              }
             }
           });
           

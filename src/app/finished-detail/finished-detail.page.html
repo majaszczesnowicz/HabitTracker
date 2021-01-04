@@ -13,7 +13,8 @@
 <ion-content>
   <ion-item class={{habit.color}} *ngIf = "ifDesc">opis: {{habit.description}}</ion-item>
   <div>
-    <p class="p-f-d">{{message1}}</p>
+    <p class="p-f-d">udało ci się trzymać postanowienia przez </p>
+    <p class="bold">{{message1}}</p>
     <canvas #doughnutCanvas></canvas>
   </div>
   <ion-card *ngIf = "ifGoal"> 
