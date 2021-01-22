@@ -19,20 +19,20 @@
               <ion-item-divider color="tertiary">
                 <ion-label>ukończone</ion-label>
               </ion-item-divider>
-              <ion-item *ngFor="let item of items" text-center>
-                <ion-label>nawyki: {{item.habitCounter}}</ion-label>
+              <ion-item text-center>
+                <ion-label>nawyki: {{habitCounter}}</ion-label>
               </ion-item>
-              <ion-item *ngFor="let item of items" text-center>
-                <ion-label class="smallerFont">w tym osiągnięte cele: {{item.goalCounter}}</ion-label>
+              <ion-item text-center>
+                <ion-label class="smallerFont">w tym osiągnięte cele: {{goalCounter}}</ion-label>
               </ion-item>
-              <ion-item *ngFor="let item of items" text-center>
-                <ion-label>zadania: {{item.taskCounter}}</ion-label>
+              <ion-item text-center>
+                <ion-label>zadania: {{taskCounter}}</ion-label>
               </ion-item>
             </ion-item-group>
           </ion-list>
          
           <ion-button color="primary" expand="block" (click)="signOut()">wyloguj</ion-button>
-          <ion-button color="primary" expand="block" (click)="scheduleBasic()">powiadomienie</ion-button>
+
         </div>
       </ion-col>
     </ion-row>

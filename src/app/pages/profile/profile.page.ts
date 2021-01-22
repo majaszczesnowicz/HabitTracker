@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Plugins, LocalNotificationEnabledResult, LocalNotificationActionPerformed, LocalNotification, Device} from '@capacitor/core';
 import { NavController, AlertController, Platform } from '@ionic/angular';
-import { getTime } from 'date-fns';
-const {LocalNotifications} = Plugins;
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-profile',
@@ -14,8 +12,10 @@ const {LocalNotifications} = Plugins;
 export class ProfilePage implements OnInit {
   user = {};
   uid = {};
-  items = [];
-  
+  habitCounter = 0;
+  goalCounter = 0;
+  taskCounter = 0;
+
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore, public navCtrl: NavController, 
     private plt: Platform, alertCtrl: AlertController) {
     this.afAuth.authState.subscribe(user => {
@@ -29,38 +29,24 @@ export class ProfilePage implements OnInit {
     this.afAuth.authState.subscribe(user => {
       if (!user)
         return;
-      this.db.collection(`users/${this.uid}/counters`).snapshotChanges().subscribe(colSnap => {
-        this.items = [];
+      this.db.collection('users').doc(`${this.uid}`).collection('doneToDos').snapshotChanges().subscribe(colSnap => {
+        this.taskCounter = 0;
+        colSnap.forEach(() => {
+          this.taskCounter += 1;
+        });
+      });
+      this.db.collection('users').doc(`${this.uid}`).collection('finishedHabits').snapshotChanges().subscribe(colSnap => {
+        this.habitCounter = 0;
+        this.goalCounter = 0;
         colSnap.forEach(a => {
-          let item = a.payload.doc.data();
-          this.items.push(item);
+          this.habitCounter += 1;
+          if(a.payload.doc.get('goal') != 0 && a.payload.doc.get('successDays') >= a.payload.doc.get('goal')){
+            this.goalCounter += 1;
+          };
         });
       });
     });
-    await LocalNotifications.requestPermission();
   } 
-
-  async scheduleBasic(){
-    let date = new Date(Date.now() + 1000 * 5);
-    let num = getTime(date);
-    console.log(num);
-    await LocalNotifications.schedule({
-      notifications: [
-        {
-          title: "Title",
-          body: "Body",
-          id: num,
-          schedule: { 
-            at: date
-          },
-          attachments: null,
-          actionTypeId: "",
-          extra: null,
-          smallIcon: "res://icon"
-        }
-      ]
-    });
-  }
 
   signOut() {
     this.afAuth.signOut().then(() => {

@@ -15,7 +15,7 @@
   <ion-list>
 
     <ion-spinner *ngIf = "loading" color="success"></ion-spinner>
-    <p class="info" *ngIf = "noItems">wybierz "+" aby dodać zadania!</p>
+    <p class="info" *ngIf = "noItems">wybierz "+" aby dodać zadania</p>
 
     <ion-item-sliding *ngFor="let item of items, let i=index">
       <ion-item><ion-label>{{item.text}}</ion-label></ion-item>
@@ -42,6 +42,8 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
+
+  <p class="info" *ngIf = "noItems">przesuń zadanie aby zobaczyć opcje</p>
 
 </ion-content>
 

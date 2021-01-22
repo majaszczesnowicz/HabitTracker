@@ -32,7 +32,6 @@ import { AngularFireMessagingModule } from '@angular/fire/messaging';
     AngularFireAuthModule,
     LoginPageModule,
     DetailPageModule,
-    AngularFireModule.initializeApp(environment.firebase),
     AngularFireMessagingModule,
   ],
   providers: [

@@ -25,6 +25,7 @@ export class HomePage implements OnInit{
   noItems = false;
   randomColor;
   habit: any = {};
+  itemsEnding = [];
 
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore, public navCtrl: NavController, private router: Router,
@@ -128,8 +129,6 @@ export class HomePage implements OnInit{
                 let reminderDate = new Date(getYear(dateDay),dateDay.getMonth(),dateDay.getDate()-1,reminder.getHours(),reminder.getMinutes());
                 let id = getTime(now);
                 id = id + i;
-                console.log(reminderDate);
-                console.log(id);
                 await LocalNotifications.schedule({
                   notifications: [
                     {
@@ -142,8 +141,7 @@ export class HomePage implements OnInit{
                       attachments: null,
                       actionTypeId: "",
                       extra: null,
-                      smallIcon: "res://icon",
-                      sound: "file://juntos.mp3"
+                      smallIcon: "res://icon"
                     }
                   ]
                 });
@@ -244,40 +242,9 @@ export class HomePage implements OnInit{
     }
 
     completeHabit(item){
-      let goalAchieved = false;
       this.db.doc(`users/${this.uid}/ongoingHabits/${item.id}`).delete();
       let id = item.id;
       this.db.doc(`users/${this.uid}/finishedHabits/${id}`).set(item);
-      if(item.successDays >= item.goal){
-        goalAchieved = true;
-      }
-      let goalCounter;
-      if(goalAchieved){
-        goalCounter = 1;
-      }
-      else{goalCounter = 0}
-      const increment = firebase.firestore.FieldValue.increment(1);
-      const counterRef = this.db.collection('users').doc(`${this.uid}`).collection('counters').doc('counter'); 
-      this.db.collection('users').doc(`${this.uid}`).collection('counters').doc('counter').ref.get().then((documentSnapshot) => {
-        if(!documentSnapshot.exists){
-          counterRef.set(
-          { taskCounter: 0,
-            habitCounter: 1,
-            goalCounter: goalCounter
-          });
-        }
-        else{
-          if(goalAchieved){
-            counterRef.update(
-              { habitCounter: increment,
-                goalCounter: increment
-              });
-          }
-          else{
-            counterRef.update({ habitCounter: increment });
-          }
-        }
-      });
       delete item.id;
     } 
  
@@ -285,4 +252,5 @@ export class HomePage implements OnInit{
       this.dataService.setData(id, item);
       this.router.navigateByUrl(`/detail/${id}`);  
     }
+
   }

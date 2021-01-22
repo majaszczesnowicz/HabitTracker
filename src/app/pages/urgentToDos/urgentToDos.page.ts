@@ -105,22 +105,8 @@ export class UrgentToDosPage implements OnInit {
 
   completeTask(item){
     this.moveTask(item, 'doneToDos');
-    const increment = firebase.firestore.FieldValue.increment(1);
-    const counterRef = this.db.collection('users').doc(`${this.uid}`).collection('counters').doc('counter'); 
-    this.db.collection('users').doc(`${this.uid}`).collection('counters').doc('counter').ref.get().then((documentSnapshot) => {
-      if(!documentSnapshot.exists){
-        counterRef.set(
-          { taskCounter: 1,
-            habitCounter: 0,
-            goalCounter: 0 
-          });
-      }
-      else{
-        counterRef.update({ taskCounter: increment });
-      }
-    });
   }
-
+  
   moveLater(item){
     this.moveTask(item, 'laterToDos')
   }

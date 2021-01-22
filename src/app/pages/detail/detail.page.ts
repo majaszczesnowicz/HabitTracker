@@ -24,6 +24,7 @@ export class DetailPage implements OnInit {
   ifDesc = true;
   goalMessage = "";
   remHour;
+  ifRem = false;
 
   calendar = {
         mode: 'month',
@@ -116,6 +117,7 @@ export class DetailPage implements OnInit {
     }
     if(!this.habit.description){this.ifDesc = false;}
     if(this.habit.reminder){
+      this.ifRem = true;
       this.remHour = this.getRemHour();
     }
   } 

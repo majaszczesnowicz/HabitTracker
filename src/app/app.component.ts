@@ -37,7 +37,7 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.styleBlackTranslucent();
+      this.statusBar.overlaysWebView(false);
       this.splashScreen.hide();
 
       this.afAuth.authState.subscribe(user => {

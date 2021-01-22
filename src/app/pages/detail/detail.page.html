@@ -51,7 +51,7 @@
       </calendar>
     </div>
     <p class="p-f-d2">monitoruj nawyk i zaznaczaj w kalendarzu dni, w które udało ci się trzymać postanowienia</p>
-    <ion-item class={{habit.color}} *ngIf = "habit.reminder">przypomnienie codziennie o {{remHour}}</ion-item>
+    <ion-item class={{habit.color}} *ngIf = "ifRem">przypomnienie codziennie o {{remHour}}</ion-item>
   </ion-content>   
 
   <ng-template #template let-view="view" let-row="row" let-col="col">
