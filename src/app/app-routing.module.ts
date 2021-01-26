@@ -60,7 +60,7 @@ const routes: Routes = [
     resolve: {
       habitData: DataResolverService
     },
-    loadChildren: () => import('./finished-detail/finished-detail.module').then( m => m.FinishedDetailPageModule)
+    loadChildren: () => import('./pages/finished-detail/finished-detail.module').then( m => m.FinishedDetailPageModule)
   }
 
 ];
